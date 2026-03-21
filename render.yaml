@@ -10,7 +10,7 @@ services:
     runtime: ruby
     plan: free
     buildCommand: bin/render-build.sh
-    startCommand: bundle exec rails server -b 0.0.0.0 -p $PORT
+    startCommand: bin/render-start.sh
     healthCheckPath: /up
     envVars:
       - key: DATABASE_URL

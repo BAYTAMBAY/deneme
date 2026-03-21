@@ -1,0 +1,49 @@
+body
+{
+	padding: 8px;
+}
+
+.header_style_wrapper
+{
+	top: 8px;
+}
+
+.frame_left
+{
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 8px;
+	z-index: 1000;
+}
+
+.frame_right
+{
+	position: fixed;
+	top: 0;
+	right: 0;
+	height: 100%;
+	width: 8px;
+	z-index: 1000;
+}
+
+.frame_top
+{
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 8px;
+	width: 100%;
+	z-index: 1000;
+}
+
+.frame_bottom
+{
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	height: 8px;
+	width: 100%;
+	z-index: 1000;
+}

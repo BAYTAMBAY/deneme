@@ -88,7 +88,8 @@ Rails.application.configure do
   config.hosts = [
     "oneticketaway.com",
     "www.oneticketaway.com",
-    /.*\.up\.railway\.app/
+    /.*\.up\.railway\.app/,
+    /.*\.onrender\.com/
   ]
 
   if ENV["APP_HOST"].present?

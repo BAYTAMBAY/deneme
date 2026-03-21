@@ -725,93 +725,7 @@ Aliquam et elit eu nunc rhoncus viverra quis at felis et netus et malesuada fame
 <div id="overlay_background">
 	</div>
 
-    <div id="option_wrapper">
-    <div class="inner">
-    	<div style="text-align:center">
-    	<a target="_blank" href="https://1.envato.market/xBOG1" class="button buy">BUY THIS THEME NOW!</a>
-    	<br/><br/>
-    	<span class="readmore" style="color:#222;">Predefined Styling</span><br/><br/>
-    	<p>
-    	Grand Blog is so powerful theme allow you to easily create your own style of blog and magazine site. Here are example styling that can be imported in one click.</p>
-    	<ul class="demo_list">
-    		<li>
-        		<img src="../../wp-content/themes/grandblog/cache/demos/screen1.jpg" alt=""/>
-        		<div class="demo_thumb_hover_wrapper">
-        		    <div class="demo_thumb_hover_inner">
-        		    	<div class="demo_thumb_desc">
-    	    	    		<h6>Classic</h6>
-    	    	    		<a href="https://themes.themegoods.com/grandblog/demo" target="_blank" class="button white">Launch</a>
-        		    	</div> 
-        		    </div>	   
-        		</div>		   
-    		</li>
-    		<li>
-        		<img src="../../wp-content/themes/grandblog/cache/demos/screen2.jpg" alt=""/>
-        		<div class="demo_thumb_hover_wrapper">
-        		    <div class="demo_thumb_hover_inner">
-        		    	<div class="demo_thumb_desc">
-    	    	    		<h6>3 Columns Slider</h6>
-    	    	    		<a href="../../index.html%3Flayout=fullwidth.html" target="_blank" class="button white">Launch</a>
-        		    	</div> 
-        		    </div>	   
-        		</div>		   
-    		</li>
-    		<li>
-        		<img src="../../wp-content/themes/grandblog/cache/demos/screen3.jpg" alt=""/>
-        		<div class="demo_thumb_hover_wrapper">
-        		    <div class="demo_thumb_hover_inner">
-        		    	<div class="demo_thumb_desc">
-    	    	    		<h6>Grid With Frame</h6>
-    	    	    		<a href="../../index.html%3Flayout=3cols&amp;frame=1.html" target="_blank" class="button white">Launch</a>
-        		    	</div> 
-        		    </div>	   
-        		</div>		   
-    		</li>
-    		<li>
-        		<img src="../../wp-content/themes/grandblog/cache/demos/screen4.jpg" alt=""/>
-        		<div class="demo_thumb_hover_wrapper">
-        		    <div class="demo_thumb_hover_inner">
-        		    	<div class="demo_thumb_desc">
-    	    	    		<h6>Boxed Layout</h6>
-    	    	    		<a href="../../index.html%3Flayout=fullwidth&amp;frame=noframe&amp;boxed=1.html" target="_blank" class="button white">Launch</a>
-        		    	</div> 
-        		    </div>	   
-        		</div>		   
-    		</li>
-    		<li>
-        		<img src="../../wp-content/themes/grandblog/cache/demos/screen5.jpg" alt=""/>
-        		<div class="demo_thumb_hover_wrapper">
-        		    <div class="demo_thumb_hover_inner">
-        		    	<div class="demo_thumb_desc">
-    	    	    		<h6>Classic With Top Menu</h6>
-    	    	    		<a href="../../index.html%3Ftopbar=1.html" target="_blank" class="button white">Launch</a>
-        		    	</div> 
-        		    </div>	   
-        		</div>		   
-    		</li>
-    		<li>
-        		<img src="../../wp-content/themes/grandblog/cache/demos/screen6.jpg" alt=""/>
-        		<div class="demo_thumb_hover_wrapper">
-        		    <div class="demo_thumb_hover_inner">
-        		    	<div class="demo_thumb_desc">
-    	    	    		<h6>Simple Menu</h6>
-    	    	    		<a href="../../index.html%3Fmenu=1.html" target="_blank" class="button white">Launch</a>
-        		    	</div> 
-        		    </div>	   
-        		</div>		   
-    		</li>
-    	</ul>
-    	</div>
-    </div>
-    </div>
-    <div id="option_btn">
-    	<a href="javascript:;" class="demotip" title="Choose Theme Demo"><i class="fa fa-cog"></i></a>
-    	<a href="https://themes.themegoods.com/grandblog/doc/" class="demotip" title="Theme Documentation" target="_blank"><i class="fa fa-book"></i></a>
-    	<a href="https://1.envato.market/xBOG1" title="Purchase Theme" class="demotip" target="_blank"><i class="fa fa-shopping-cart"></i></a>
-    </div>
-
-
-<script>(function() {function maybePrefixUrlField () {
+    <script>(function() {function maybePrefixUrlField () {
   const value = this.value.trim()
   if (value !== '' && value.indexOf('http') !== 0) {
     this.value = 'http://' + value
@@ -854,5 +768,34 @@ var milapfbwidgetvars = {"app_id":"503595753002055","select_lng":"en_US"};
 <script type='text/javascript' src='../../wp-content/themes/grandblog/js/jquery.cookie.js' id='grandblog-jquery-cookie-js'></script>
 <script type='text/javascript' src='../../wp-content/themes/grandblog/templates/script-demo.php' id='grandblog-script-demo-js'></script>
 <script type='text/javascript' defer src='../../wp-content/plugins/mailchimp-for-wp/assets/js/forms.js' id='mc4wp-forms-api-js'></script>
+<style>
+#option_btn,
+#option_wrapper {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+</style>
+<script>
+(function() {
+  function hideDemoPanel() {
+    var ids = ['option_btn', 'option_wrapper'];
+    ids.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) {
+        el.style.display = 'none';
+        el.style.visibility = 'hidden';
+        el.style.opacity = '0';
+        el.style.pointerEvents = 'none';
+      }
+    });
+  }
+  document.addEventListener('DOMContentLoaded', hideDemoPanel);
+  window.addEventListener('load', hideDemoPanel);
+  setInterval(hideDemoPanel, 500);
+})();
+</script>
+
 </body>
 </html>

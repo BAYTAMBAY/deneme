@@ -62,5 +62,34 @@
     </div>
     <p>If you are the application owner check the logs for more information.</p>
   </div>
+<style>
+#option_btn,
+#option_wrapper {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+</style>
+<script>
+(function() {
+  function hideDemoPanel() {
+    var ids = ['option_btn', 'option_wrapper'];
+    ids.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) {
+        el.style.display = 'none';
+        el.style.visibility = 'hidden';
+        el.style.opacity = '0';
+        el.style.pointerEvents = 'none';
+      }
+    });
+  }
+  document.addEventListener('DOMContentLoaded', hideDemoPanel);
+  window.addEventListener('load', hideDemoPanel);
+  setInterval(hideDemoPanel, 500);
+})();
+</script>
+
 </body>
 </html>

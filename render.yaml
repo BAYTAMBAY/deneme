@@ -22,7 +22,7 @@ services:
       - key: RAILS_SERVE_STATIC_FILES
         value: "1"
       - key: WEB_CONCURRENCY
-        value: "2"
+        value: "1"
       - key: APP_HOST
         value: oneticketaway.com
       - key: SECRET_KEY_BASE

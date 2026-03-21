@@ -68,6 +68,11 @@ body.single .footer_bar
 	padding-bottom: 60px;
 }
 
+#option_btn,
+#option_wrapper
+{
+	display: none !important;
+}
 
 #option_btn
 {
@@ -267,7 +272,6 @@ strong.label, div.label
 		-o-transform: translate(360px, 0px);
 	}
 }
-
 
 
 

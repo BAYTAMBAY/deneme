@@ -17,7 +17,7 @@
         </div>
 
         <nav class="site-nav">
-          <%= link_to "Blog", posts_path %>
+          <%= link_to "Ana Sayfa", "/" %>
           <% if admin_logged_in? %>
             <%= link_to "Yeni Yazi", new_admin_post_path %>
             <%= button_to "Cikis", admin_logout_path, method: :delete, form_class: "inline-form" %>

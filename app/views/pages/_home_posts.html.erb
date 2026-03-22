@@ -1,0 +1,108 @@
+<% if posts.any? %>
+  <% featured_post = posts.first %>
+  <% remaining_posts = posts.drop(1) %>
+
+  <div id="post-<%= featured_post.id %>" class="post-<%= featured_post.id %> post type-post status-publish format-standard has-post-thumbnail hentry">
+    <div class="post_wrapper">
+      <div class="post_content_wrapper">
+        <div class="post_header mixed">
+          <% if featured_post.cover_image_url.present? %>
+            <div class="post_img static">
+              <a href="<%= post_path(featured_post) %>">
+                <img src="<%= featured_post.cover_image_url %>" alt="<%= featured_post.title %>" style="width:960px;height:auto;" />
+              </a>
+            </div>
+          <% end %>
+
+          <br class="clear"/>
+
+          <div class="post_header_title">
+            <div class="post_info_cat">
+              <span>
+                <a href="/admin">Featured Story</a>
+              </span>
+            </div>
+            <h5><a href="<%= post_path(featured_post) %>" title="<%= featured_post.title %>"><%= featured_post.title %></a></h5>
+            <hr class="title_break">
+            <div class="post_detail post_date">
+              <span class="post_info_date">
+                <span>Posted On <%= l(featured_post.published_at || featured_post.created_at, format: :long) %></span>
+              </span>
+            </div>
+          </div>
+
+          <p><%= featured_post.excerpt.presence || truncate(featured_post.body, length: 220) %></p>
+          <hr class="readmore_break">
+
+          <div class="post_button_wrapper">
+            <a class="readmore" href="<%= post_path(featured_post) %>">Continue Reading</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br class="clear"/>
+
+  <% remaining_posts.each_with_index do |post, index| %>
+    <div id="post-<%= post.id %>" class="post-<%= post.id %> post type-post status-publish format-standard has-post-thumbnail hentry"<%= ' data-column="last"'.html_safe if index.odd? %>>
+      <div class="post_wrapper">
+        <div class="post_content_wrapper">
+          <div class="post_header">
+            <% if post.cover_image_url.present? %>
+              <div class="post_img static small">
+                <a href="<%= post_path(post) %>">
+                  <img src="<%= post.cover_image_url %>" alt="<%= post.title %>" style="width:700px;height:auto;" />
+                </a>
+              </div>
+            <% end %>
+
+            <br class="clear"/>
+
+            <div class="post_header_title">
+              <div class="post_info_cat">
+                <span>
+                  <a href="/admin">Latest Post</a>
+                </span>
+              </div>
+              <h5><a href="<%= post_path(post) %>" title="<%= post.title %>"><%= post.title %></a></h5>
+              <hr class="title_break small">
+              <div class="post_detail post_date">
+                <span class="post_info_date">
+                  <span><%= l(post.published_at || post.created_at, format: :long) %></span>
+                </span>
+              </div>
+            </div>
+
+            <p><%= truncate(post.excerpt.presence || post.body, length: 180) %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <div class="post-0 post type-post status-publish format-standard hentry">
+    <div class="post_wrapper">
+      <div class="post_content_wrapper">
+        <div class="post_header mixed">
+          <div class="post_header_title">
+            <div class="post_info_cat">
+              <span><a href="/admin">Blog setup</a></span>
+            </div>
+            <h5><a href="/admin/login" title="Admin Panel">Ilk blog yazini admin panelinden ekleyebilirsin</a></h5>
+            <hr class="title_break">
+            <div class="post_detail post_date">
+              <span class="post_info_date"><span>Panel hazir</span></span>
+            </div>
+          </div>
+
+          <p>Ana sayfadaki bu alan artik dinamik. Admin panelinden yayinladigin yazilar burada otomatik gosterilir.</p>
+          <hr class="readmore_break">
+
+          <div class="post_button_wrapper">
+            <a class="readmore" href="/admin/login">Admin Panele Git</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

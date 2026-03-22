@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   root "pages#home"
 
-  resources :posts, only: [:index, :show], path: "blog"
+  resources :posts, only: [:show], path: "blog"
 
   namespace :admin do
     root "posts#index"

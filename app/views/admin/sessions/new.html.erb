@@ -1,0 +1,24 @@
+<% content_for :title, "Admin Login | OneTicketAway" %>
+
+<section class="auth-card" style="max-width: 560px; margin: 2rem auto 0;">
+  <p class="eyebrow">Admin</p>
+  <h1>Blog paneline giris yap</h1>
+  <p>Varsayilan bilgiler environment variable ile degistirilebilir. Render tarafinda `ADMIN_USERNAME` ve `ADMIN_PASSWORD` tanimlaman yeterli.</p>
+
+  <%= form_with url: admin_login_path, class: "stack" do %>
+    <div class="field">
+      <%= label_tag :username, "Kullanici adi" %>
+      <%= text_field_tag :username, params[:username], autocomplete: "username" %>
+    </div>
+
+    <div class="field">
+      <%= label_tag :password, "Sifre" %>
+      <%= password_field_tag :password, nil, autocomplete: "current-password" %>
+    </div>
+
+    <div class="actions">
+      <%= submit_tag "Giris yap" %>
+      <%= link_to "Bloga don", posts_path, class: "button button--secondary" %>
+    </div>
+  <% end %>
+</section>

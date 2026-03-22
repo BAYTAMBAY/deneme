@@ -1,0 +1,27 @@
+<% content_for :title, "#{@post.title} | OneTicketAway Admin" %>
+
+<section class="panel" style="padding: 2rem;">
+  <p class="eyebrow">Onizleme</p>
+  <h1 class="page-title"><%= @post.title %></h1>
+  <p class="article-meta">Slug: <strong><%= @post.slug %></strong></p>
+
+  <div class="actions" style="margin-bottom: 1.5rem;">
+    <%= link_to "Duzenle", edit_admin_post_path(@post), class: "button" %>
+    <% if @post.published? %>
+      <%= link_to "Canli sayfa", post_path(@post), class: "button button--secondary" %>
+    <% end %>
+    <%= link_to "Listeye don", admin_root_path, class: "button button--secondary" %>
+  </div>
+
+  <% if @post.cover_image_url.present? %>
+    <p><img src="<%= @post.cover_image_url %>" alt="<%= @post.title %> kapak gorseli"></p>
+  <% end %>
+
+  <% if @post.excerpt.present? %>
+    <p><strong><%= @post.excerpt %></strong></p>
+  <% end %>
+
+  <div class="prose">
+    <%= simple_format(@post.body) %>
+  </div>
+</section>

@@ -1,0 +1,63 @@
+<%= form_with model: [:admin, post], class: "stack" do |form| %>
+  <% if post.errors.any? %>
+    <div class="flash flash--alert">
+      <strong>Form kaydedilemedi.</strong>
+      <ul>
+        <% post.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :title, "Baslik" %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div class="field">
+    <%= form.label :slug, "Slug" %>
+    <%= form.text_field :slug %>
+    <p class="field__hint">Bos birakirsan basliga gore otomatik olusturulur.</p>
+  </div>
+
+  <div class="field">
+    <%= form.label :excerpt, "Kisa ozet" %>
+    <%= form.text_area :excerpt, rows: 4 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :body, "Yazi" %>
+    <%= form.text_area :body %>
+  </div>
+
+  <div class="field">
+    <%= form.label :cover_image_url, "Kapak gorseli URL" %>
+    <%= form.url_field :cover_image_url %>
+  </div>
+
+  <div class="field">
+    <%= form.label :status, "Durum" %>
+    <%= form.select :status, Post::STATUSES.map { |status| [status.titleize, status] } %>
+  </div>
+
+  <div class="field">
+    <%= form.label :published_at, "Yayin tarihi" %>
+    <%= form.datetime_field :published_at %>
+  </div>
+
+  <div class="field">
+    <%= form.label :meta_title, "SEO title" %>
+    <%= form.text_field :meta_title %>
+  </div>
+
+  <div class="field">
+    <%= form.label :meta_description, "SEO description" %>
+    <%= form.text_area :meta_description, rows: 4 %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit post.persisted? ? "Yaziyi guncelle" : "Yaziyi olustur" %>
+    <%= link_to "Listeye don", admin_root_path, class: "button button--secondary" %>
+  </div>
+<% end %>

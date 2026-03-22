@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "OneTicketAway" %></title>
+    <title><%= content_for(:title) || "OneTicketAway Admin" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="description" content="<%= content_for(:meta_description) || "Travel stories, blog posts and editorial content from OneTicketAway." %>">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <%= stylesheet_link_tag "application" %>
   </head>
 
@@ -14,14 +12,16 @@
     <header class="site-header">
       <div class="shell">
         <div class="site-branding">
-          <a href="/" class="site-branding__name">OneTicketAway</a>
-          <p class="site-branding__tag">Travel blog and publishing dashboard</p>
+          <a href="<%= admin_root_path %>" class="site-branding__name">OneTicketAway Admin</a>
+          <p class="site-branding__tag">Blog yazilarini yonet</p>
         </div>
 
         <nav class="site-nav">
-          <%= link_to "Home", "/" %>
           <%= link_to "Blog", posts_path %>
-          <%= link_to(admin_logged_in? ? "Admin" : "Admin Login", admin_root_path) %>
+          <% if admin_logged_in? %>
+            <%= link_to "Yeni Yazi", new_admin_post_path %>
+            <%= button_to "Cikis", admin_logout_path, method: :delete, form_class: "inline-form" %>
+          <% end %>
         </nav>
       </div>
     </header>
@@ -33,11 +33,5 @@
 
       <%= yield %>
     </main>
-
-    <footer class="site-footer">
-      <div class="shell">
-        <p>&copy; <%= Time.current.year %> OneTicketAway</p>
-      </div>
-    </footer>
   </body>
 </html>

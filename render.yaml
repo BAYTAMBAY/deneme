@@ -25,5 +25,9 @@ services:
         value: "1"
       - key: APP_HOST
         value: oneticketaway.com
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
       - key: SECRET_KEY_BASE
         sync: false

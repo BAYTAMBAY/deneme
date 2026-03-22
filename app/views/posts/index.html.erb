@@ -1,0 +1,38 @@
+<% content_for :title, "Blog | OneTicketAway" %>
+<% content_for :meta_description, "OneTicketAway blog yazilari, seyahat hikayeleri ve editorial icerikler." %>
+
+<section class="hero-card">
+  <p class="eyebrow">Blog</p>
+  <h1>Yeni yazilarini yayinlayabilecegin alan hazir.</h1>
+  <p>Bu sayfa artik Rails icinden besleniyor. Admin panelinden yazi ekledikce burada otomatik listelenecek.</p>
+</section>
+
+<% if @posts.any? %>
+  <section class="article-grid">
+    <% @posts.each do |post| %>
+      <article class="article-card">
+        <% if post.cover_image_url.present? %>
+          <img src="<%= post.cover_image_url %>" alt="<%= post.title %> kapak gorseli">
+        <% end %>
+
+        <div class="article-card__body">
+          <p class="article-card__meta">
+            <%= l(post.published_at || post.created_at, format: :long) %>
+          </p>
+          <h2><%= link_to post.title, post_path(post) %></h2>
+          <p><%= post.excerpt.presence || truncate(post.body, length: 180) %></p>
+          <%= link_to "Yaziyi oku", post_path(post), class: "button" %>
+        </div>
+      </article>
+    <% end %>
+  </section>
+<% else %>
+  <section class="empty-state">
+    <p class="eyebrow">Bos durum</p>
+    <h2 class="page-title">Henuz yayinlanmis bir yazi yok.</h2>
+    <p>Ilk yazini eklemek icin admin paneline girip yeni bir post olusturabilirsin.</p>
+    <div class="actions">
+      <%= link_to "Admin panele git", admin_root_path, class: "button" %>
+    </div>
+  </section>
+<% end %>

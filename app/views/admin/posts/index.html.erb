@@ -1,0 +1,53 @@
+<% content_for :title, "Admin Posts | OneTicketAway" %>
+
+<section class="admin-toolbar">
+  <div>
+    <p class="eyebrow">Admin Panel</p>
+    <h1 class="page-title">Blog yazilari</h1>
+  </div>
+
+  <div class="actions">
+    <%= link_to "Yeni yazi", new_admin_post_path, class: "button" %>
+  </div>
+</section>
+
+<section class="admin-table">
+  <table>
+    <thead>
+      <tr>
+        <th>Baslik</th>
+        <th>Durum</th>
+        <th>Yayin tarihi</th>
+        <th>Islemler</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @posts.any? %>
+        <% @posts.each do |post| %>
+          <tr>
+            <td>
+              <strong><%= post.title %></strong><br>
+              <span class="article-meta">/<%= post.slug %></span>
+            </td>
+            <td><span class="tag"><%= post.status %></span></td>
+            <td><%= post.published_at ? l(post.published_at, format: :long) : "-" %></td>
+            <td>
+              <div class="actions">
+                <%= link_to "Gor", admin_post_path(post), class: "button button--secondary" %>
+                <%= link_to "Duzenle", edit_admin_post_path(post), class: "button button--secondary" %>
+                <% if post.published? %>
+                  <%= link_to "Canli sayfa", post_path(post), class: "button button--secondary" %>
+                <% end %>
+                <%= button_to "Sil", admin_post_path(post), method: :delete, class: "button button--danger", form: { data: { turbo_confirm: "Bu yazi silinsin mi?" } } %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <tr>
+          <td colspan="4">Henuz hic yazi olusturulmamis.</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>

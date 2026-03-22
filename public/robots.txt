@@ -1,1 +1,8 @@
-# See https://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+User-agent: *
+Allow: /
+Disallow: /wp-admin/
+Disallow: /wp-json/
+Disallow: /comments/
+Disallow: /feed/
+
+Sitemap: https://www.oneticketaway.com/sitemap.xml

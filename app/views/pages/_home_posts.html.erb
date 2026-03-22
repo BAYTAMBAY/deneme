@@ -2,36 +2,34 @@
   <% featured_post = posts.first %>
   <% remaining_posts = posts.drop(1) %>
 
-  <div id="post-<%= featured_post.id %>" class="post-<%= featured_post.id %> post type-post status-publish format-standard has-post-thumbnail hentry">
+  <div id="post-<%= featured_post.id %>" class="home-dynamic-featured post-<%= featured_post.id %> post type-post status-publish format-standard has-post-thumbnail hentry">
     <div class="post_wrapper">
       <div class="post_content_wrapper">
         <div class="post_header mixed">
-          <% if featured_post.cover_image_url.present? %>
-            <div class="post_img static">
-              <a href="<%= post_path(featured_post) %>">
-                <img src="<%= featured_post.cover_image_url %>" alt="<%= featured_post.title %>" style="width:960px;height:auto;" />
-              </a>
-            </div>
-          <% end %>
+          <div class="post_img static">
+            <a href="<%= post_path(featured_post) %>">
+              <img src="<%= featured_post.cover_image_url.presence || "https://themes-themegoods.b-cdn.net/grandblog/demo/wp-content/uploads/2015/07/22-960x640.jpg" %>" alt="<%= featured_post.title %>" style="width:960px;height:640px;" />
+            </a>
+          </div>
 
           <br class="clear"/>
 
           <div class="post_header_title">
             <div class="post_info_cat">
               <span>
-                <a href="/admin">Featured Story</a>
+                <a href="#">OneTicketAway</a>
               </span>
             </div>
             <h5><a href="<%= post_path(featured_post) %>" title="<%= featured_post.title %>"><%= featured_post.title %></a></h5>
             <hr class="title_break">
             <div class="post_detail post_date">
               <span class="post_info_date">
-                <span>Posted On <%= l(featured_post.published_at || featured_post.created_at, format: :long) %></span>
+                <span>Posted On <%= (featured_post.published_at || featured_post.created_at).strftime("%B %-d, %Y") %></span>
               </span>
             </div>
           </div>
 
-          <p><%= featured_post.excerpt.presence || truncate(featured_post.body, length: 220) %></p>
+          <p class="post_excerpt"><%= featured_post.excerpt.presence || truncate(featured_post.body, length: 220) %></p>
           <hr class="readmore_break">
 
           <div class="post_button_wrapper">
@@ -44,36 +42,34 @@
   <br class="clear"/>
 
   <% remaining_posts.each_with_index do |post, index| %>
-    <div id="post-<%= post.id %>" class="post-<%= post.id %> post type-post status-publish format-standard has-post-thumbnail hentry"<%= ' data-column="last"'.html_safe if index.odd? %>>
+    <div id="post-<%= post.id %>" class="home-dynamic-post post-<%= post.id %> post type-post status-publish format-standard has-post-thumbnail hentry"<%= ' data-column="last"'.html_safe if index.odd? %>>
       <div class="post_wrapper">
         <div class="post_content_wrapper">
           <div class="post_header">
-            <% if post.cover_image_url.present? %>
-              <div class="post_img static small">
-                <a href="<%= post_path(post) %>">
-                  <img src="<%= post.cover_image_url %>" alt="<%= post.title %>" style="width:700px;height:auto;" />
-                </a>
-              </div>
-            <% end %>
+            <div class="post_img static small">
+              <a href="<%= post_path(post) %>">
+                <img src="<%= post.cover_image_url.presence || "https://themes-themegoods.b-cdn.net/grandblog/demo/wp-content/uploads/2015/07/24-700x529.jpg" %>" alt="<%= post.title %>" style="width:700px;height:529px;" />
+              </a>
+            </div>
 
             <br class="clear"/>
 
             <div class="post_header_title">
               <div class="post_info_cat">
                 <span>
-                  <a href="/admin">Latest Post</a>
+                  <a href="#">OneTicketAway</a>
                 </span>
               </div>
               <h5><a href="<%= post_path(post) %>" title="<%= post.title %>"><%= post.title %></a></h5>
               <hr class="title_break small">
               <div class="post_detail post_date">
                 <span class="post_info_date">
-                  <span><%= l(post.published_at || post.created_at, format: :long) %></span>
+                  <span><%= (post.published_at || post.created_at).strftime("%B %-d, %Y") %></span>
                 </span>
               </div>
             </div>
 
-            <p><%= truncate(post.excerpt.presence || post.body, length: 180) %></p>
+            <p class="post_excerpt"><%= truncate(post.excerpt.presence || post.body, length: 180) %></p>
           </div>
         </div>
       </div>

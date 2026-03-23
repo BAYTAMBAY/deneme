@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
     ActiveSupport::SecurityUtils.secure_compare(provided_digest, expected_digest)
   end
 
-  def render_site_shell(content_partial:, locals: {}, slider_partial: nil, slider_locals: {}, template_file: "index.html")
+  def render_site_shell(content_partial:, locals: {}, slider_partial: nil, slider_locals: {}, template_file: "index.html", inject_styles: true)
     template = File.read(Rails.public_path.join(template_file))
     content_markup = render_to_string(partial: content_partial, formats: [:html], locals: locals)
     sidebar_markup = render_to_string(partial: "shared/site_sidebar", formats: [:html], locals: locals)
@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
       render_to_string(partial: slider_partial, formats: [:html], locals: slider_locals)
     end
 
-    template.sub!("</head>", "#{site_shell_styles}</head>")
+    template.sub!("</head>", "#{site_shell_styles}</head>") if inject_styles
 
     if slider_markup.present?
       existing_slider_start = template.index('<div id="post_featured_slider"')

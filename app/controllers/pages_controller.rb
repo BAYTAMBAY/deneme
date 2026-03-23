@@ -6,7 +6,8 @@ class PagesController < ApplicationController
       locals: { posts: @posts },
       slider_partial: "pages/home_slider",
       slider_locals: { posts: @posts.first(3) },
-      template_file: "home_template.html"
+      template_file: "home_template.html",
+      inject_styles: false
     )
   end
 end

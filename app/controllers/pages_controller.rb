@@ -1,5 +1,13 @@
 class PagesController < ApplicationController
   def home
-    render file: Rails.public_path.join("home_template.html"), layout: false
+    posts = Post.published.limit(7)
+
+    render_site_shell(
+      content_partial: "pages/home_posts",
+      locals: { posts: posts },
+      slider_partial: "pages/home_slider",
+      slider_locals: { posts: posts.first(3) },
+      template_file: "home_template.html"
+    )
   end
 end

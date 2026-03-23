@@ -1,0 +1,27 @@
+<% if posts.any? %>
+  <div id="post_featured_slider" class="slider_wrapper">
+    <div class="flexslider" data-height="550">
+      <ul class="slides">
+        <% posts.each do |post| %>
+          <li>
+            <a href="<%= post_path(post) %>">
+              <div class="slider_image" style="background-image:url('<%= post.cover_image_url.presence || "https://themes-themegoods.b-cdn.net/grandblog/demo/wp-content/uploads/2015/07/photo-1437915015400-137312b61975.jpg" %>');"></div>
+            </a>
+            <div class="slide_post">
+              <div class="post_info_cat">
+                <span>
+                  <a href="#">OneTicketAway</a>
+                </span>
+              </div>
+              <h2><a href="<%= post_path(post) %>" title="<%= post.title %>"><%= post.title %></a></h2>
+              <hr class="title_break slider">
+              <div class="slide_post_excerpt">
+                <p><%= truncate(post.excerpt.presence || post.body, length: 180) %></p>
+              </div>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>

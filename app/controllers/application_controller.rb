@@ -32,12 +32,16 @@ class ApplicationController < ActionController::Base
     ActiveSupport::SecurityUtils.secure_compare(provided_digest, expected_digest)
   end
 
-  def render_site_shell(content_partial:, locals: {})
+  def render_site_shell(content_partial:, locals: {}, slider_partial: nil, slider_locals: {})
     template = File.read(Rails.public_path.join("index.html"))
     content_markup = render_to_string(partial: content_partial, formats: [:html], locals: locals)
     sidebar_markup = render_to_string(partial: "shared/site_sidebar", formats: [:html], locals: locals)
+    slider_markup = if slider_partial
+      render_to_string(partial: slider_partial, formats: [:html], locals: slider_locals)
+    end
 
     template.sub!("</head>", "#{site_shell_styles}</head>")
+    template.sub!('<div id="page_content_wrapper">', "#{slider_markup}\n<div id=\"page_content_wrapper\">") if slider_markup.present?
 
     start_marker = '<div class="inner_wrapper">'
     end_marker = '<!-- End main content -->'

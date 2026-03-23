@@ -1,0 +1,41 @@
+<div class="sidebar_wrapper site-sidebar-shell">
+  <div class="sidebar">
+    <div class="content">
+      <ul class="sidebar_widget">
+        <li class="widget widget_text">
+          <div class="widget-card">
+            <h2 class="widgettitle">OneTicketAway</h2>
+            <div class="textwidget">
+              <p>Travel hikayeleri, rota notlari ve yeni yazilar burada birikiyor. Sayfayi sade tutup ihtiyac oldukca yeni bolumler ekliyoruz.</p>
+              <a href="/admin/login" class="button">Admin Paneli</a>
+            </div>
+          </div>
+        </li>
+
+        <li class="widget widget_text">
+          <div class="widget-card">
+            <h2 class="widgettitle">Son Yazilar</h2>
+            <ul class="sidebar-list">
+              <% Post.published.limit(4).each do |post| %>
+                <li>
+                  <a href="<%= post_path(post) %>"><%= post.title %></a>
+                  <span><%= (post.published_at || post.created_at).strftime("%B %-d, %Y") %></span>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </li>
+
+        <li class="widget widget_text">
+          <div class="widget-card sidebar-cta">
+            <h2 class="widgettitle">Yeni Icerik Ekle</h2>
+            <div class="textwidget">
+              <p>Yeni bir blog yazisi ekleyip ana sayfada hemen yayina alabilirsin.</p>
+              <a href="/admin" class="button">Yazi Yonet</a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

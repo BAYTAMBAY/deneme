@@ -32,8 +32,8 @@ class ApplicationController < ActionController::Base
     ActiveSupport::SecurityUtils.secure_compare(provided_digest, expected_digest)
   end
 
-  def render_site_shell(content_partial:, locals: {}, slider_partial: nil, slider_locals: {})
-    template = File.read(Rails.public_path.join("index.html"))
+  def render_site_shell(content_partial:, locals: {}, slider_partial: nil, slider_locals: {}, template_file: "index.html")
+    template = File.read(Rails.public_path.join(template_file))
     content_markup = render_to_string(partial: content_partial, formats: [:html], locals: locals)
     sidebar_markup = render_to_string(partial: "shared/site_sidebar", formats: [:html], locals: locals)
     slider_markup = if slider_partial
@@ -41,7 +41,17 @@ class ApplicationController < ActionController::Base
     end
 
     template.sub!("</head>", "#{site_shell_styles}</head>")
-    template.sub!('<div id="page_content_wrapper">', "#{slider_markup}\n<div id=\"page_content_wrapper\">") if slider_markup.present?
+
+    if slider_markup.present?
+      existing_slider_start = template.index('<div id="post_featured_slider"')
+      existing_slider_end = template.index('<div id="page_content_wrapper">', existing_slider_start || 0)
+
+      if existing_slider_start && existing_slider_end
+        template = template[0...existing_slider_start] + slider_markup + "\n" + template[existing_slider_end..]
+      else
+        template.sub!('<div id="page_content_wrapper">', "#{slider_markup}\n<div id=\"page_content_wrapper\">")
+      end
+    end
 
     start_marker = '<div class="inner_wrapper">'
     end_marker = '<!-- End main content -->'

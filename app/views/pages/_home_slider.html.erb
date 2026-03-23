@@ -1,8 +1,10 @@
 <% if posts.any? %>
+  <% slider_categories = [["Art", "Lifestyle"], ["Art", "Food"], ["Lifestyle", "Music"]] %>
   <div id="post_featured_slider" class="slider_wrapper">
     <div class="flexslider" data-height="550">
       <ul class="slides">
-        <% posts.each do |post| %>
+        <% posts.each_with_index do |post, index| %>
+          <% categories = slider_categories[index % slider_categories.length] %>
           <li>
             <a href="<%= post_path(post) %>">
               <div class="slider_image" style="background-image:url('<%= post.cover_image_url.presence || "https://themes-themegoods.b-cdn.net/grandblog/demo/wp-content/uploads/2015/07/photo-1437915015400-137312b61975.jpg" %>');"></div>
@@ -10,7 +12,9 @@
             <div class="slide_post">
               <div class="post_info_cat">
                 <span>
-                  <a href="#">OneTicketAway</a>
+                  <a href="#"><%= categories.first %></a>
+                  &nbsp;/
+                  <a href="#"><%= categories.last %></a>
                 </span>
               </div>
               <h2><a href="<%= post_path(post) %>" title="<%= post.title %>"><%= post.title %></a></h2>

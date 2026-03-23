@@ -1,6 +1,7 @@
 <% if posts.any? %>
   <% featured_post = posts.first %>
   <% remaining_posts = posts.drop(1) %>
+  <% home_categories = [["Art", "Lifestyle"], ["Art", "Lifestyle"], ["Art", "Food"], ["Art", "Food"], ["Food", "Lifestyle"], ["Art", "Lifestyle"]] %>
 
   <div id="post-<%= featured_post.id %>" class="home-dynamic-featured post-<%= featured_post.id %> post type-post status-publish format-standard has-post-thumbnail hentry">
     <div class="post_wrapper">
@@ -17,7 +18,9 @@
           <div class="post_header_title">
             <div class="post_info_cat">
               <span>
-                <a href="#">OneTicketAway</a>
+                <a href="#"><%= home_categories.first.first %></a>
+                &nbsp;/
+                <a href="#"><%= home_categories.first.last %></a>
               </span>
             </div>
             <h5><a href="<%= post_path(featured_post) %>" title="<%= featured_post.title %>"><%= featured_post.title %></a></h5>
@@ -35,6 +38,10 @@
           <div class="post_button_wrapper">
             <a class="readmore" href="<%= post_path(featured_post) %>">Continue Reading</a>
           </div>
+
+          <div class="post_info_comment">
+            <a href="<%= post_path(featured_post) %>">No Comment</a>
+          </div>
         </div>
       </div>
     </div>
@@ -42,6 +49,7 @@
   <br class="clear"/>
 
   <% remaining_posts.each_with_index do |post, index| %>
+    <% categories = home_categories[(index + 1) % home_categories.length] %>
     <div id="post-<%= post.id %>" class="home-dynamic-post post-<%= post.id %> post type-post status-publish format-standard has-post-thumbnail hentry"<%= ' data-column="last"'.html_safe if index.odd? %>>
       <div class="post_wrapper">
         <div class="post_content_wrapper">
@@ -57,7 +65,9 @@
             <div class="post_header_title">
               <div class="post_info_cat">
                 <span>
-                  <a href="#">OneTicketAway</a>
+                  <a href="#"><%= categories.first %></a>
+                  &nbsp;/
+                  <a href="#"><%= categories.last %></a>
                 </span>
               </div>
               <h5><a href="<%= post_path(post) %>" title="<%= post.title %>"><%= post.title %></a></h5>

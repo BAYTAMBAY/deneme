@@ -1,9 +1,11 @@
 <% content_for :title, "Admin Login | OneTicketAway" %>
 
-<section class="auth-card" style="max-width: 560px; margin: 2rem auto 0;">
-  <p class="eyebrow">Admin</p>
-  <h1>Blog paneline giris yap</h1>
-  <p>Varsayilan bilgiler environment variable ile degistirilebilir. Render tarafinda `ADMIN_USERNAME` ve `ADMIN_PASSWORD` tanimlaman yeterli.</p>
+<section class="auth-card auth-card--elevated">
+  <div class="auth-card__copy">
+    <p class="eyebrow">Admin</p>
+    <h1>Blog paneline giris yap</h1>
+    <p>Buradan yeni yazi olusturabilir, gorsel ekleyebilir ve yayin durumunu yonetebilirsin. Canli ortamda kullanici adi ve sifreyi environment variable ile degistirebilirsin.</p>
+  </div>
 
   <%= form_with url: admin_login_path, class: "stack" do %>
     <div class="field">

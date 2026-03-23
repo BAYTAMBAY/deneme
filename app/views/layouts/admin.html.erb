@@ -8,25 +8,29 @@
     <%= stylesheet_link_tag "application" %>
   </head>
 
-  <body class="site-shell">
-    <header class="site-header">
-      <div class="shell">
+  <body class="site-shell admin-theme">
+    <div class="admin-background"></div>
+
+    <header class="site-header admin-header">
+      <div class="shell admin-header__inner">
         <div class="site-branding">
-          <a href="<%= admin_root_path %>" class="site-branding__name">OneTicketAway Admin</a>
-          <p class="site-branding__tag">Blog yazilarini yonet</p>
+          <p class="site-branding__eyebrow">OneTicketAway</p>
+          <a href="<%= admin_root_path %>" class="site-branding__name">Editorial Desk</a>
+          <p class="site-branding__tag">Blog yazilarini yonet, duzenle ve yayina hazirla.</p>
         </div>
 
-        <nav class="site-nav">
-          <%= link_to "Ana Sayfa", "/" %>
+        <nav class="site-nav admin-nav">
+          <%= link_to "Panel", admin_root_path, class: "nav-pill" %>
+          <%= link_to "Ana Sayfa", "/", class: "nav-pill nav-pill--soft" %>
           <% if admin_logged_in? %>
-            <%= link_to "Yeni Yazi", new_admin_post_path %>
-            <%= button_to "Cikis", admin_logout_path, method: :delete, form_class: "inline-form" %>
+            <%= link_to "Yeni Yazi", new_admin_post_path, class: "nav-pill nav-pill--primary" %>
+            <%= button_to "Cikis", admin_logout_path, method: :delete, form_class: "inline-form", class: "nav-pill nav-pill--ghost" %>
           <% end %>
         </nav>
       </div>
     </header>
 
-    <main class="shell page-content">
+    <main class="shell page-content admin-page-content">
       <% flash.each do |type, message| %>
         <div class="flash flash--<%= type %>"><%= message %></div>
       <% end %>

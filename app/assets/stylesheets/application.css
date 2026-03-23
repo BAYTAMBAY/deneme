@@ -18,14 +18,17 @@
   --bg: #f7f2ea;
   --surface: #ffffff;
   --surface-muted: #efe7dc;
+  --surface-strong: #f4ede3;
   --text: #1f1a16;
   --text-muted: #6c6258;
   --accent: #0d6b5b;
   --accent-dark: #09473c;
+  --accent-soft: #d9eee7;
   --border: #ddcfbf;
   --danger: #a72b2b;
   --success: #1f7a45;
   --shadow: 0 14px 30px rgba(31, 26, 22, 0.08);
+  --shadow-strong: 0 24px 50px rgba(31, 26, 22, 0.12);
 }
 
 * {
@@ -34,9 +37,12 @@
 
 body.site-shell {
   margin: 0;
-  background: linear-gradient(180deg, #f5efe7 0%, #fcfaf7 100%);
+  background:
+    radial-gradient(circle at top left, rgba(13, 107, 91, 0.12), transparent 28%),
+    radial-gradient(circle at top right, rgba(190, 150, 86, 0.14), transparent 24%),
+    linear-gradient(180deg, #f5efe7 0%, #fcfaf7 100%);
   color: var(--text);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
   line-height: 1.6;
 }
 
@@ -72,6 +78,33 @@ img {
   z-index: 10;
 }
 
+.admin-background {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.58), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(13, 107, 91, 0.08), transparent 22%);
+}
+
+.admin-header {
+  background: rgba(255, 251, 245, 0.86);
+}
+
+.admin-header__inner {
+  min-height: 104px;
+}
+
+.site-branding__eyebrow {
+  margin: 0 0 0.4rem;
+  color: var(--accent);
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
 .site-header .shell,
 .site-footer .shell {
   display: flex;
@@ -83,32 +116,78 @@ img {
 
 .site-branding__name {
   color: var(--text);
-  font-size: 1.5rem;
+  font-size: clamp(1.6rem, 3vw, 2.35rem);
   font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .site-branding__tag {
   margin: 0.25rem 0 0;
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 0.98rem;
+  max-width: 36rem;
 }
 
 .site-nav {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .site-nav a {
-  font-family: Arial, sans-serif;
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
   font-size: 0.95rem;
   font-weight: 600;
 }
 
+.nav-pill,
+.inline-form .nav-pill {
+  border: 1px solid rgba(31, 26, 22, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 8px 20px rgba(31, 26, 22, 0.05);
+}
+
+.nav-pill:hover {
+  color: var(--accent-dark);
+  border-color: rgba(13, 107, 91, 0.2);
+}
+
+.nav-pill--soft {
+  background: rgba(239, 231, 220, 0.82);
+}
+
+.nav-pill--primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.nav-pill--primary:hover {
+  color: #fff;
+}
+
+.nav-pill--ghost {
+  background: transparent;
+}
+
+.inline-form {
+  margin: 0;
+}
+
 .page-content {
   padding: 2rem 0 4rem;
+}
+
+.admin-page-content {
+  position: relative;
+  z-index: 1;
 }
 
 .flash {
@@ -144,6 +223,10 @@ img {
   box-shadow: var(--shadow);
 }
 
+.panel--spacious {
+  padding: 2rem;
+}
+
 .hero-card,
 .auth-card,
 .article-content,
@@ -153,12 +236,52 @@ img {
 
 .hero-card {
   margin-bottom: 2rem;
+  box-shadow: var(--shadow-strong);
+}
+
+.admin-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.admin-hero__stats {
+  display: flex;
+  align-items: stretch;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.stat-chip {
+  min-width: 132px;
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(13, 107, 91, 0.14);
+  border-radius: 20px;
+  background: linear-gradient(180deg, #fff 0%, #f6f0e7 100%);
+}
+
+.stat-chip strong {
+  display: block;
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+.stat-chip span {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--text-muted);
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 0.84rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .eyebrow {
   margin: 0 0 0.5rem;
   color: var(--accent);
-  font-family: Arial, sans-serif;
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -183,6 +306,12 @@ img {
   font-size: 1.02rem;
 }
 
+.section-copy,
+.lead-copy {
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
 .article-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -200,7 +329,7 @@ img {
 .article-card__meta,
 .article-meta {
   color: var(--text-muted);
-  font-family: Arial, sans-serif;
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
   font-size: 0.9rem;
 }
 
@@ -217,10 +346,11 @@ input[type="submit"] {
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  font-family: Arial, sans-serif;
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
   padding: 0.8rem 1.2rem;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
 
 .button:hover,
@@ -228,11 +358,18 @@ button:hover,
 input[type="submit"]:hover {
   background: var(--accent-dark);
   color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(13, 107, 91, 0.2);
 }
 
 .button--secondary {
   background: var(--surface-muted);
   color: var(--text);
+}
+
+.button--secondary:hover {
+  color: var(--text);
+  background: #e6dacb;
 }
 
 .button--danger {
@@ -247,7 +384,7 @@ input[type="submit"]:hover {
 .field label {
   display: block;
   margin-bottom: 0.4rem;
-  font-family: Arial, sans-serif;
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
   font-size: 0.9rem;
   font-weight: 700;
 }
@@ -259,9 +396,19 @@ input[type="submit"]:hover {
   padding: 0.85rem 1rem;
   border: 1px solid var(--border);
   border-radius: 16px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.9);
   color: var(--text);
   font: inherit;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  outline: none;
+  border-color: rgba(13, 107, 91, 0.45);
+  box-shadow: 0 0 0 4px rgba(13, 107, 91, 0.1);
+  background: #fff;
 }
 
 .field textarea {
@@ -288,6 +435,7 @@ input[type="submit"]:hover {
   width: 100%;
   overflow: hidden;
   border-collapse: collapse;
+  background: rgba(255, 255, 255, 0.88);
 }
 
 .admin-table table {
@@ -304,11 +452,12 @@ input[type="submit"]:hover {
 }
 
 .admin-table th {
-  font-family: Arial, sans-serif;
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
   font-size: 0.82rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-muted);
+  background: rgba(244, 237, 227, 0.72);
 }
 
 .tag {
@@ -317,9 +466,14 @@ input[type="submit"]:hover {
   padding: 0.3rem 0.7rem;
   border-radius: 999px;
   background: var(--surface-muted);
-  font-family: Arial, sans-serif;
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
   font-size: 0.82rem;
   font-weight: 700;
+}
+
+.tag--success {
+  background: var(--accent-soft);
+  color: var(--accent-dark);
 }
 
 .prose p {
@@ -332,6 +486,32 @@ input[type="submit"]:hover {
   flex-wrap: wrap;
 }
 
+.actions--compact .button,
+.actions--compact button {
+  padding: 0.65rem 0.95rem;
+  font-size: 0.88rem;
+}
+
+.auth-card--elevated {
+  max-width: 640px;
+  margin: 3rem auto 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 242, 234, 0.96) 100%);
+  box-shadow: var(--shadow-strong);
+}
+
+.auth-card__copy {
+  margin-bottom: 1.5rem;
+}
+
+.preview-media {
+  margin: 0 0 1.5rem;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
 @media (max-width: 720px) {
   .site-header .shell,
   .site-footer .shell {
@@ -342,11 +522,16 @@ input[type="submit"]:hover {
   .hero-card,
   .auth-card,
   .article-content,
-  .empty-state {
+  .empty-state,
+  .panel--spacious {
     padding: 1.4rem;
   }
 
   .admin-table {
     overflow-x: auto;
+  }
+
+  .admin-header__inner {
+    min-height: auto;
   }
 }

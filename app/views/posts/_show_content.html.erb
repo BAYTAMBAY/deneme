@@ -2,7 +2,7 @@
   <div id="post-<%= post.id %>" class="single-dynamic-post post-<%= post.id %> post type-post status-publish format-standard has-post-thumbnail hentry">
     <div class="post_wrapper">
       <div class="post_content_wrapper">
-        <div class="post_header mixed">
+        <div class="post_header single">
           <div class="post_img static">
             <img src="<%= post.cover_image_url.presence || "https://themes-themegoods.b-cdn.net/grandblog/demo/wp-content/uploads/2015/07/22-960x640.jpg" %>" alt="<%= post.title %>" style="width:960px;height:640px;" />
           </div>
@@ -13,7 +13,7 @@
             <div class="post_info_cat">
               <span><a href="#">OneTicketAway</a></span>
             </div>
-            <h5><a href="<%= post_path(post) %>" title="<%= post.title %>"><%= post.title %></a></h5>
+            <h1><%= post.title %></h1>
             <hr class="title_break">
             <div class="post_detail post_date">
               <span class="post_info_date">

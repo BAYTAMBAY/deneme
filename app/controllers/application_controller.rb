@@ -65,18 +65,13 @@ class ApplicationController < ActionController::Base
       <style id="oneticketaway-site-shell">
       #page_content_wrapper .inner .sidebar_wrapper.site-sidebar-shell{display:block !important;background:#f2f2f2;}
       .site-sidebar-shell .sidebar_widget{margin:0;padding:0;list-style:none;}
-      .site-sidebar-shell .sidebar_widget > li{margin:0 0 26px;}
-      .site-sidebar-shell .textwidget p{margin:0 0 14px;}
-      .site-sidebar-shell .widget-card{background:#fff;border:1px solid #e8dfd2;border-radius:4px;padding:22px;box-shadow:0 12px 30px rgba(34,34,34,.06);}
-      .site-sidebar-shell .widget-card h3,
-      .site-sidebar-shell .widget-card h2{margin:0 0 12px;font-family:"Josefin Sans", Helvetica, Arial, sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;}
-      .site-sidebar-shell .widget-card .button{display:inline-block;margin-top:10px;}
-      .site-sidebar-shell .sidebar-list{margin:0;padding:0;list-style:none;}
-      .site-sidebar-shell .sidebar-list li{padding:12px 0;border-bottom:1px solid #ece4d9;}
-      .site-sidebar-shell .sidebar-list li:last-child{border-bottom:0;padding-bottom:0;}
-      .site-sidebar-shell .sidebar-list a{display:block;font-weight:700;}
-      .site-sidebar-shell .sidebar-list span{display:block;color:#8c7d6d;font-size:12px;margin-top:4px;}
-      .site-sidebar-shell .sidebar-cta{background:#fff7ec;border:1px solid #edd9b8;}
+      .site-sidebar-shell .sidebar_widget > li{margin-bottom:24px;}
+      .site-sidebar-shell .posts.blog.withthumb li{display:flex;gap:12px;align-items:flex-start;}
+      .site-sidebar-shell .posts.blog.withthumb li + li{margin-top:16px;}
+      .site-sidebar-shell .post_circle_thumb img{width:78px;height:58px;object-fit:cover;}
+      .site-sidebar-shell .post_attribute{display:block;margin-top:4px;font-size:12px;color:#999;}
+      .site-sidebar-shell .simple-newsletter-form input[type=email]{width:100%;margin-bottom:10px;}
+      .site-sidebar-shell .simple-newsletter-form input[type=submit]{width:100%;}
       .home-dynamic-featured .post_img.static img{width:960px !important;height:640px !important;object-fit:cover;}
       .home-dynamic-post .post_img.static.small img{width:700px !important;height:529px !important;object-fit:cover;}
       .home-dynamic-post .post_header_title,.home-dynamic-featured .post_header_title{min-height:118px;}
@@ -85,6 +80,7 @@ class ApplicationController < ActionController::Base
       .home-dynamic-featured .post_excerpt{min-height:78px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;}
       .home-dynamic-post .post_info_cat a,.home-dynamic-featured .post_info_cat a,.single-dynamic-post .post_info_cat a{pointer-events:none;}
       .single-dynamic-post .post_img.static img{width:960px !important;height:640px !important;object-fit:cover;}
+      .single-dynamic-post .post_header.single .post_header_title h1{font-size:34px;}
       .single-dynamic-post .post_excerpt{font-size:15px;line-height:1.8;}
       .single-dynamic-post .post_content_body{margin-top:24px;}
       .single-dynamic-post .post_content_body p{margin:0 0 18px;}

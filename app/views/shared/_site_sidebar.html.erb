@@ -3,36 +3,47 @@
     <div class="content">
       <ul class="sidebar_widget">
         <li class="widget widget_text">
-          <div class="widget-card">
-            <h2 class="widgettitle">OneTicketAway</h2>
-            <div class="textwidget">
-              <p>Travel hikayeleri, rota notlari ve yeni yazilar burada birikiyor. Sayfayi sade tutup ihtiyac oldukca yeni bolumler ekliyoruz.</p>
-              <a href="/admin/login" class="button">Admin Paneli</a>
-            </div>
+          <h2 class="widgettitle">About</h2>
+          <div class="textwidget">
+            <p><img width="300" height="300" src="https://themes-themegoods.b-cdn.net/grandblog/demo/wp-content/uploads/2015/11/aboutme.jpg" alt="OneTicketAway" style="margin-bottom:10px;"/></p>
+            <p>OneTicketAway icin seyahat hikayeleri, rota notlari ve ilham veren sehir duraklari bir araya geliyor. Yeni yazilar burada yayina giriyor.</p>
           </div>
         </li>
 
         <li class="widget widget_text">
-          <div class="widget-card">
-            <h2 class="widgettitle">Son Yazilar</h2>
-            <ul class="sidebar-list">
-              <% Post.published.limit(4).each do |post| %>
-                <li>
+          <h2 class="widgettitle">Subscribe</h2>
+          <div class="textwidget">
+            <form class="simple-newsletter-form" action="/admin/login" method="get">
+              <p><input type="email" name="email" placeholder="E-posta adresiniz" /></p>
+              <p><input type="submit" value="Abone Ol" /></p>
+            </form>
+          </div>
+        </li>
+
+        <li class="widget Grand_Blog_Popular_Posts">
+          <h2 class="widgettitle"><span>Popular Posts</span></h2>
+          <ul class="posts blog withthumb">
+            <% Post.published.limit(3).each do |post| %>
+              <li>
+                <div class="post_circle_thumb">
+                  <a href="<%= post_path(post) %>">
+                    <img src="<%= post.cover_image_url.presence || "https://themes-themegoods.b-cdn.net/grandblog/demo/wp-content/uploads/2015/07/15-300x200.jpg" %>" alt="<%= post.title %>" />
+                  </a>
+                </div>
+                <div>
                   <a href="<%= post_path(post) %>"><%= post.title %></a>
-                  <span><%= (post.published_at || post.created_at).strftime("%B %-d, %Y") %></span>
-                </li>
-              <% end %>
-            </ul>
-          </div>
+                  <div class="post_attribute"><%= (post.published_at || post.created_at).strftime("%B %-d, %Y") %></div>
+                </div>
+              </li>
+            <% end %>
+          </ul>
         </li>
 
         <li class="widget widget_text">
-          <div class="widget-card sidebar-cta">
-            <h2 class="widgettitle">Yeni Icerik Ekle</h2>
-            <div class="textwidget">
-              <p>Yeni bir blog yazisi ekleyip ana sayfada hemen yayina alabilirsin.</p>
-              <a href="/admin" class="button">Yazi Yonet</a>
-            </div>
+          <h2 class="widgettitle">Admin</h2>
+          <div class="textwidget">
+            <p>Yeni icerik eklemek ya da mevcut yazilari guncellemek icin admin paneline gecebilirsin.</p>
+            <p><a href="/admin/login" class="button">Admin Paneli</a></p>
           </div>
         </li>
       </ul>

@@ -1,0 +1,174 @@
+<% content_for :title, "Game | OneTicketAway" %>
+<% content_for :meta_description, "OneTicketAway icin hazirlanan kucuk tarayici oyunu. Hedefleri topla ve 30 saniyede en yuksek skora ulasmaya calis." %>
+
+<section class="game-hero">
+  <div class="game-hero__copy">
+    <p class="eyebrow">Mini Game</p>
+    <h1>Sky Chase</h1>
+    <p>30 saniye boyunca harita uzerinde beliren hedefleri yakala. Kucuk hedef daha fazla puan verir, kacirirsan zaman kaybedersin.</p>
+
+    <div class="game-stats">
+      <div class="game-stat">
+        <span>Skor</span>
+        <strong id="score">0</strong>
+      </div>
+      <div class="game-stat">
+        <span>Sure</span>
+        <strong id="timer">30</strong>
+      </div>
+      <div class="game-stat">
+        <span>En iyi</span>
+        <strong id="best-score">0</strong>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" id="start-game">Oyunu Baslat</button>
+      <%= link_to "Ana sayfaya don", root_path, class: "button button--secondary" %>
+    </div>
+  </div>
+
+  <div class="game-hero__panel">
+    <div class="game-board" id="game-board" aria-live="polite">
+      <div class="game-board__overlay" id="game-overlay">
+        <strong>Hazir misin?</strong>
+        <span>Baslat'a tikla ve hedefleri yakala.</span>
+      </div>
+      <button type="button" class="target target--hidden" id="target" aria-label="Target"></button>
+    </div>
+  </div>
+</section>
+
+<section class="panel panel--spacious game-instructions">
+  <p class="eyebrow">Nasil Oynanir</p>
+  <h2 class="page-title">Kurallar basit</h2>
+  <div class="article-grid">
+    <article class="article-card">
+      <div class="article-card__body">
+        <h3>1. Baslat</h3>
+        <p>Butona bastiginda sayaç calismaya baslar ve ilk hedef ekranda belirir.</p>
+      </div>
+    </article>
+    <article class="article-card">
+      <div class="article-card__body">
+        <h3>2. Topla</h3>
+        <p>Hedefe ne kadar hizli tiklarsan o kadar cok puan kazanirsin. Kucuk hedef daha degerlidir.</p>
+      </div>
+    </article>
+    <article class="article-card">
+      <div class="article-card__body">
+        <h3>3. Rekor kir</h3>
+        <p>Oyun sonunda skorun tarayicida saklanir. Tekrar oynayip kendi rekorunu gecmeye calis.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const board = document.getElementById("game-board");
+    const target = document.getElementById("target");
+    const overlay = document.getElementById("game-overlay");
+    const scoreEl = document.getElementById("score");
+    const timerEl = document.getElementById("timer");
+    const bestEl = document.getElementById("best-score");
+    const startButton = document.getElementById("start-game");
+
+    if (!board || !target || !overlay || !scoreEl || !timerEl || !bestEl || !startButton) return;
+
+    const BEST_KEY = "oneticketaway-sky-chase-best";
+    let score = 0;
+    let timeLeft = 30;
+    let gameTimer = null;
+    let playing = false;
+
+    const syncBestScore = () => {
+      const bestScore = Number(window.localStorage.getItem(BEST_KEY) || 0);
+      bestEl.textContent = String(bestScore);
+      return bestScore;
+    };
+
+    const randomBetween = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+    const moveTarget = () => {
+      const boardRect = board.getBoundingClientRect();
+      const size = randomBetween(44, 86);
+      const maxLeft = Math.max(boardRect.width - size - 20, 20);
+      const maxTop = Math.max(boardRect.height - size - 20, 20);
+
+      target.style.width = `${size}px`;
+      target.style.height = `${size}px`;
+      target.style.left = `${randomBetween(12, maxLeft)}px`;
+      target.style.top = `${randomBetween(12, maxTop)}px`;
+      target.dataset.points = String(Math.max(6, Math.round(100 / size * 7)));
+      target.classList.remove("target--hidden");
+    };
+
+    const finishGame = () => {
+      playing = false;
+      clearInterval(gameTimer);
+      gameTimer = null;
+      target.classList.add("target--hidden");
+
+      const best = syncBestScore();
+      if (score > best) {
+        window.localStorage.setItem(BEST_KEY, String(score));
+        bestEl.textContent = String(score);
+      }
+
+      overlay.innerHTML = `<strong>Oyun bitti</strong><span>Skorun ${score}. Tekrar dene ve rekorunu gelistir.</span>`;
+      overlay.classList.remove("game-board__overlay--hidden");
+      startButton.textContent = "Tekrar Oyna";
+    };
+
+    const startGame = () => {
+      score = 0;
+      timeLeft = 30;
+      playing = true;
+      scoreEl.textContent = "0";
+      timerEl.textContent = "30";
+      overlay.classList.add("game-board__overlay--hidden");
+      startButton.textContent = "Oynaniyor...";
+      moveTarget();
+
+      clearInterval(gameTimer);
+      gameTimer = window.setInterval(() => {
+        timeLeft -= 1;
+        timerEl.textContent = String(timeLeft);
+
+        if (timeLeft <= 0) {
+          finishGame();
+        }
+      }, 1000);
+    };
+
+    startButton.addEventListener("click", () => {
+      if (playing) return;
+      startGame();
+    });
+
+    target.addEventListener("click", () => {
+      if (!playing) return;
+
+      score += Number(target.dataset.points || 10);
+      scoreEl.textContent = String(score);
+      moveTarget();
+    });
+
+    board.addEventListener("click", (event) => {
+      if (!playing) return;
+      if (event.target === target) return;
+
+      score = Math.max(0, score - 5);
+      timeLeft = Math.max(0, timeLeft - 1);
+      scoreEl.textContent = String(score);
+      timerEl.textContent = String(timeLeft);
+
+      if (timeLeft <= 0) {
+        finishGame();
+      }
+    });
+
+    syncBestScore();
+  })();
+</script>

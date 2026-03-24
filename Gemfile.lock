@@ -214,6 +214,9 @@ GEM
       tsort
     reline (0.6.3)
       io-console (~> 0.5)
+    rexml (3.4.4)
+    rss (0.3.2)
+      rexml
     securerandom (0.4.1)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
@@ -264,6 +267,7 @@ DEPENDENCIES
   pg (~> 1.5)
   puma (>= 5.0)
   rails (~> 7.1.5, >= 7.1.5.1)
+  rss
   sprockets-rails
   sqlite3 (>= 1.4)
   tzinfo-data

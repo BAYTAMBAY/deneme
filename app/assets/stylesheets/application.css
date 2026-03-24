@@ -1144,6 +1144,37 @@ input[type="submit"]:hover {
   cursor: not-allowed;
 }
 
+.briefing-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(280px, 0.9fr);
+  gap: 1.5rem;
+}
+
+.briefing-separator {
+  display: inline-block;
+  margin: 0 0.45rem;
+}
+
+.briefing-summary-card,
+.briefing-body-card {
+  margin-top: 1rem;
+}
+
+.briefing-sidebar .article-card {
+  position: sticky;
+  top: 100px;
+}
+
+.briefing-archive-item + .briefing-archive-item {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.briefing-archive-item p {
+  margin: 0.35rem 0 0.5rem;
+}
+
 .game-instructions h3 {
   margin-top: 0;
 }
@@ -1199,5 +1230,13 @@ input[type="submit"]:hover {
     flex-wrap: wrap;
     width: calc(100% - 2rem);
     justify-content: center;
+  }
+
+  .briefing-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .briefing-sidebar .article-card {
+    position: static;
   }
 }

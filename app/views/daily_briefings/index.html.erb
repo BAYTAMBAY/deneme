@@ -1,0 +1,51 @@
+<% content_for :title, "Gundem | OneTicketAway" %>
+<% content_for :meta_description, "Her gun otomatik olusturulan gundem ozeti sayfasi." %>
+
+<section class="hero-card">
+  <p class="eyebrow">Gundem Botu</p>
+  <h1>Gunluk Gundem Sayfasi</h1>
+  <p>Bu alan her gun bot tarafindan guncellenir. Gunun one cikan basliklari otomatik cekilir ve tek sayfada listelenir.</p>
+</section>
+
+<% if @latest_briefing.present? %>
+  <section class="panel panel--spacious briefing-layout">
+    <article class="briefing-main">
+      <p class="eyebrow">Bugunun Ozeti</p>
+      <h2 class="page-title"><%= @latest_briefing.title %></h2>
+      <p class="article-meta">
+        <strong>Tarih:</strong> <%= l(@latest_briefing.published_on, format: :long) %>
+        <span class="briefing-separator">•</span>
+        <strong>Kaynak:</strong> <a href="<%= @latest_briefing.source_url %>" target="_blank" rel="noopener noreferrer"><%= @latest_briefing.source_name %></a>
+      </p>
+
+      <div class="article-content briefing-summary-card">
+        <p><strong><%= @latest_briefing.summary %></strong></p>
+      </div>
+
+      <div class="article-content prose briefing-body-card">
+        <%= simple_format(@latest_briefing.body) %>
+      </div>
+    </article>
+
+    <aside class="briefing-sidebar">
+      <div class="article-card">
+        <div class="article-card__body">
+          <p class="eyebrow">Son Kayitlar</p>
+          <% @recent_briefings.each do |briefing| %>
+            <div class="briefing-archive-item">
+              <strong><%= briefing.title %></strong>
+              <p><%= briefing.summary %></p>
+              <span class="article-meta"><%= l(briefing.published_on, format: :long) %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </aside>
+  </section>
+<% else %>
+  <section class="empty-state">
+    <p class="eyebrow">Hazir</p>
+    <h2 class="page-title">Henuz gundem kaydi yok</h2>
+    <p>Bot ilk kez calistiginda burasi otomatik dolacak.</p>
+  </section>
+<% end %>

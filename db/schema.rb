@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_03_22_110018) do
+ActiveRecord::Schema[7.1].define(version: 2026_03_24_090000) do
+  create_table "daily_briefings", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "summary", null: false
+    t.text "body", null: false
+    t.string "slug", null: false
+    t.string "source_name", default: "Google News RSS", null: false
+    t.string "source_url", null: false
+    t.date "published_on", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["published_on"], name: "index_daily_briefings_on_published_on", unique: true
+    t.index ["slug"], name: "index_daily_briefings_on_slug", unique: true
+  end
+
   create_table "posts", force: :cascade do |t|
     t.string "title", null: false
     t.string "slug", null: false

@@ -964,6 +964,22 @@ input[type="submit"]:hover {
   filter: blur(3px);
 }
 
+.race-canvas-shell {
+  margin-top: 1rem;
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid rgba(31, 26, 22, 0.08);
+  box-shadow: var(--shadow-strong);
+  background: linear-gradient(180deg, #0e1f35 0%, #18385f 100%);
+}
+
+#race-canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 16 / 9;
+}
+
 .game-instructions h3 {
   margin-top: 0;
 }

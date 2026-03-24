@@ -12,6 +12,7 @@
       <button type="button" class="game-selector__button" data-game-tab="memory-route">Memory Route</button>
       <button type="button" class="game-selector__button" data-game-tab="perfect-landing">Perfect Landing</button>
       <button type="button" class="game-selector__button" data-game-tab="travel-dash">Travel Dash</button>
+      <button type="button" class="game-selector__button" data-game-tab="turbo-race">3D Car Race</button>
     </div>
 
     <div class="actions">
@@ -175,6 +176,41 @@
       </div>
       <p class="game-note">Masaustu: sol ve sag ok tuslari. Mobil: ekrandaki butonlar.</p>
     </section>
+
+    <section class="game-pane" id="game-turbo-race" data-game-pane="turbo-race">
+      <div class="game-pane__header">
+        <div>
+          <p class="eyebrow">3D Race</p>
+          <h2>Turbo Boulevard</h2>
+          <p>Perspektifli pistte ilerle, rakiplerden kac ve hizi koru. Sol-sag ile serit degistir, yukari ile hizlan.</p>
+        </div>
+        <div class="game-stats">
+          <div class="game-stat">
+            <span>Skor</span>
+            <strong id="race-score">0</strong>
+          </div>
+          <div class="game-stat">
+            <span>Hiz</span>
+            <strong id="race-speed">0</strong>
+          </div>
+          <div class="game-stat">
+            <span>En iyi</span>
+            <strong id="race-best">0</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" id="start-race-game">Yarisi Baslat</button>
+        <button type="button" id="race-left" class="button button--secondary">Sola</button>
+        <button type="button" id="race-right" class="button button--secondary">Saga</button>
+      </div>
+
+      <div class="race-canvas-shell">
+        <canvas id="race-canvas" width="960" height="540" aria-label="3D car race"></canvas>
+      </div>
+      <p class="game-note" id="race-note">Masaustu: sol-sag ile yon ver, yukari ile hizlan. Mobilde butonlari kullan.</p>
+    </section>
   </div>
 </section>
 
@@ -204,6 +240,12 @@
       <div class="article-card__body">
         <h3>Travel Dash</h3>
         <p>Sahte 3D runner. Yol perspektifinde ilerlerken seyahat biletlerini topla ve engellere carpmadan ak.</p>
+      </div>
+    </article>
+    <article class="article-card">
+      <div class="article-card__body">
+        <h3>Turbo Boulevard</h3>
+        <p>Canvas tabanli gosteri oyunu. Virajli yolda rakip arabalar arasindan akarak puan topla.</p>
       </div>
     </article>
   </div>
@@ -639,9 +681,266 @@
       syncBest();
     };
 
+    const initTurboRace = () => {
+      const canvas = document.getElementById("race-canvas");
+      const startButton = document.getElementById("start-race-game");
+      const leftButton = document.getElementById("race-left");
+      const rightButton = document.getElementById("race-right");
+      const scoreEl = document.getElementById("race-score");
+      const speedEl = document.getElementById("race-speed");
+      const bestEl = document.getElementById("race-best");
+      const noteEl = document.getElementById("race-note");
+      if (!canvas || !startButton || !leftButton || !rightButton || !scoreEl || !speedEl || !bestEl || !noteEl) return;
+
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const BEST_KEY = "oneticketaway-turbo-race-best";
+      let playing = false;
+      let frameId = null;
+      let score = 0;
+      let speed = 0;
+      let lane = 1;
+      let playerX = 0;
+      let roadOffset = 0;
+      let curve = 0;
+      let curveTarget = 0;
+      let lastTime = 0;
+      let spawnCooldown = 0;
+      const cars = [];
+
+      const laneToOffset = (laneIndex) => [-0.52, 0, 0.52][laneIndex];
+      const syncBest = () => {
+        bestEl.textContent = String(Number(window.localStorage.getItem(BEST_KEY) || 0));
+      };
+
+      const resetGame = () => {
+        playing = true;
+        score = 0;
+        speed = 0.65;
+        lane = 1;
+        playerX = 0;
+        roadOffset = 0;
+        curve = 0;
+        curveTarget = 0;
+        spawnCooldown = 0;
+        cars.length = 0;
+        scoreEl.textContent = "0";
+        speedEl.textContent = "65";
+        noteEl.textContent = "Hizlan, serit degistir ve trafik arasindan ak.";
+        startButton.textContent = "Yarisiyor...";
+      };
+
+      const finishGame = () => {
+        playing = false;
+        window.cancelAnimationFrame(frameId);
+        frameId = null;
+        startButton.textContent = "Tekrar Baslat";
+        noteEl.textContent = `Kaza yaptin. Skorun ${score}. Tekrar dene.`;
+        const best = Number(window.localStorage.getItem(BEST_KEY) || 0);
+        if (score > best) {
+          window.localStorage.setItem(BEST_KEY, String(score));
+          bestEl.textContent = String(score);
+        }
+      };
+
+      const spawnCar = () => {
+        cars.push({
+          lane: Math.floor(Math.random() * 3),
+          z: 1,
+          color: ["#f05d5d", "#58a6ff", "#ffd166", "#7bd389"][Math.floor(Math.random() * 4)]
+        });
+      };
+
+      const drawSky = (width, height) => {
+        const gradient = ctx.createLinearGradient(0, 0, 0, height);
+        gradient.addColorStop(0, "#74c8ff");
+        gradient.addColorStop(0.58, "#dff4ff");
+        gradient.addColorStop(1, "#f6ede4");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.fillStyle = "rgba(255,255,255,0.7)";
+        ctx.beginPath();
+        ctx.arc(width * 0.18, height * 0.18, 38, 0, Math.PI * 2);
+        ctx.arc(width * 0.24, height * 0.17, 30, 0, Math.PI * 2);
+        ctx.arc(width * 0.21, height * 0.14, 26, 0, Math.PI * 2);
+        ctx.fill();
+      };
+
+      const drawRoad = (width, height) => {
+        for (let i = 0; i < 42; i += 1) {
+          const perspective = i / 42;
+          const nextPerspective = (i + 1) / 42;
+          const y = height * (0.32 + perspective * 0.68);
+          const nextY = height * (0.32 + nextPerspective * 0.68);
+          const roadHalfWidth = width * (0.08 + perspective * 0.34);
+          const nextRoadHalfWidth = width * (0.08 + nextPerspective * 0.34);
+          const centerX = width * 0.5 + curve * 180 * perspective;
+          const nextCenterX = width * 0.5 + curve * 180 * nextPerspective;
+
+          ctx.fillStyle = i % 2 === 0 ? "#383d4a" : "#2b2f39";
+          ctx.beginPath();
+          ctx.moveTo(centerX - roadHalfWidth, y);
+          ctx.lineTo(centerX + roadHalfWidth, y);
+          ctx.lineTo(nextCenterX + nextRoadHalfWidth, nextY);
+          ctx.lineTo(nextCenterX - nextRoadHalfWidth, nextY);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.fillStyle = i % 2 === 0 ? "#68b66a" : "#4da457";
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(centerX - roadHalfWidth, y);
+          ctx.lineTo(nextCenterX - nextRoadHalfWidth, nextY);
+          ctx.lineTo(0, nextY);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.moveTo(centerX + roadHalfWidth, y);
+          ctx.lineTo(width, y);
+          ctx.lineTo(width, nextY);
+          ctx.lineTo(nextCenterX + nextRoadHalfWidth, nextY);
+          ctx.closePath();
+          ctx.fill();
+
+          if (i < 40) {
+            ctx.strokeStyle = "rgba(255,255,255,0.55)";
+            ctx.lineWidth = Math.max(2, perspective * 6);
+            ctx.beginPath();
+            ctx.moveTo(centerX, y);
+            ctx.lineTo(nextCenterX, nextY);
+            ctx.stroke();
+          }
+        }
+      };
+
+      const drawCar = (x, y, scale, color, player = false) => {
+        const width = 48 * scale;
+        const height = 88 * scale;
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.fillStyle = "rgba(0,0,0,0.18)";
+        ctx.beginPath();
+        ctx.ellipse(0, height * 0.48, width * 0.56, height * 0.18, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = color;
+        ctx.fillRect(-width / 2, -height / 2, width, height);
+        ctx.fillStyle = player ? "#f7fafc" : "#d9e2ec";
+        ctx.fillRect(-width * 0.28, -height * 0.24, width * 0.56, height * 0.28);
+        ctx.fillStyle = "#20242c";
+        ctx.fillRect(-width * 0.46, -height * 0.42, width * 0.18, height * 0.24);
+        ctx.fillRect(width * 0.28, -height * 0.42, width * 0.18, height * 0.24);
+        ctx.fillRect(-width * 0.46, height * 0.18, width * 0.18, height * 0.24);
+        ctx.fillRect(width * 0.28, height * 0.18, width * 0.18, height * 0.24);
+        ctx.restore();
+      };
+
+      const updateCars = (delta, width, height) => {
+        for (let i = cars.length - 1; i >= 0; i -= 1) {
+          const car = cars[i];
+          car.z -= delta * (0.42 + speed * 0.38);
+          if (car.z <= 0) {
+            cars.splice(i, 1);
+            score += 18;
+            scoreEl.textContent = String(score);
+            continue;
+          }
+
+          const perspective = 1 - car.z;
+          const centerX = width * 0.5 + curve * 180 * perspective;
+          const roadHalfWidth = width * (0.08 + perspective * 0.34);
+          const laneOffset = laneToOffset(car.lane) * roadHalfWidth * 0.72;
+          const x = centerX + laneOffset;
+          const y = height * (0.34 + perspective * 0.62);
+          const scale = 0.35 + perspective * 1.05;
+
+          drawCar(x, y, scale, car.color);
+
+          if (car.z < 0.16 && car.lane === lane) {
+            finishGame();
+            return;
+          }
+        }
+      };
+
+      const render = (timestamp) => {
+        if (!playing) return;
+        if (!lastTime) lastTime = timestamp;
+        const delta = Math.min(0.032, (timestamp - lastTime) / 1000);
+        lastTime = timestamp;
+
+        const width = canvas.width;
+        const height = canvas.height;
+        ctx.clearRect(0, 0, width, height);
+        drawSky(width, height);
+
+        roadOffset += speed * 18;
+        curveTarget += (Math.random() - 0.5) * 0.02;
+        curveTarget = Math.max(-1, Math.min(1, curveTarget));
+        curve += (curveTarget - curve) * 0.018;
+        drawRoad(width, height);
+
+        spawnCooldown -= delta;
+        if (spawnCooldown <= 0) {
+          spawnCar();
+          spawnCooldown = Math.max(0.48, 1.25 - speed * 0.5);
+        }
+
+        updateCars(delta, width, height);
+
+        playerX += (laneToOffset(lane) - playerX) * 0.14;
+        drawCar(width * 0.5 + playerX * width * 0.18, height * 0.86, 1.15, "#14a07c", true);
+
+        speed = Math.min(1.8, speed + delta * 0.024);
+        speedEl.textContent = String(Math.round(speed * 100));
+        score += Math.floor(speed * 0.65);
+        scoreEl.textContent = String(score);
+
+        frameId = window.requestAnimationFrame(render);
+      };
+
+      const startGame = () => {
+        resetGame();
+        syncBest();
+        lastTime = 0;
+        window.cancelAnimationFrame(frameId);
+        frameId = window.requestAnimationFrame(render);
+      };
+
+      const steer = (dir) => {
+        if (!playing) return;
+        lane = Math.max(0, Math.min(2, lane + dir));
+      };
+
+      startButton.addEventListener("click", () => {
+        if (playing) return;
+        startGame();
+      });
+
+      leftButton.addEventListener("click", () => steer(-1));
+      rightButton.addEventListener("click", () => steer(1));
+
+      window.addEventListener("keydown", (event) => {
+        if (!playing) return;
+        if (event.key === "ArrowLeft") steer(-1);
+        if (event.key === "ArrowRight") steer(1);
+        if (event.key === "ArrowUp") speed = Math.min(1.95, speed + 0.08);
+      });
+
+      syncBest();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawSky(canvas.width, canvas.height);
+      drawRoad(canvas.width, canvas.height);
+      drawCar(canvas.width * 0.5, canvas.height * 0.86, 1.15, "#14a07c", true);
+    };
+
     initSkyChase();
     initMemoryRoute();
     initPerfectLanding();
     initTravelDash();
+    initTurboRace();
   })();
 </script>

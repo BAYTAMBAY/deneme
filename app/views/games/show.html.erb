@@ -11,6 +11,7 @@
       <button type="button" class="game-selector__button is-active" data-game-tab="sky-chase">Sky Chase</button>
       <button type="button" class="game-selector__button" data-game-tab="memory-route">Memory Route</button>
       <button type="button" class="game-selector__button" data-game-tab="perfect-landing">Perfect Landing</button>
+      <button type="button" class="game-selector__button" data-game-tab="travel-dash">Travel Dash</button>
     </div>
 
     <div class="actions">
@@ -127,6 +128,53 @@
       </div>
       <p class="game-note" id="landing-note">Baslat'a tikla, cizgi akmaya baslasin. Hedef bolgeye gelince indir.</p>
     </section>
+
+    <section class="game-pane" id="game-travel-dash" data-game-pane="travel-dash">
+      <div class="game-pane__header">
+        <div>
+          <p class="eyebrow">Runner</p>
+          <h2>Travel Dash</h2>
+          <p>Perspektifli pistte kos, valiz ve biletleri topla, engellerden kac. Klavyede sag-sol ya da ekrandaki butonlari kullan.</p>
+        </div>
+        <div class="game-stats">
+          <div class="game-stat">
+            <span>Skor</span>
+            <strong id="dash-score">0</strong>
+          </div>
+          <div class="game-stat">
+            <span>Sure</span>
+            <strong id="dash-timer">45</strong>
+          </div>
+          <div class="game-stat">
+            <span>En iyi</span>
+            <strong id="dash-best">0</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" id="start-dash-game">Travel Dash Baslat</button>
+        <button type="button" id="dash-left" class="button button--secondary">Sola</button>
+        <button type="button" id="dash-right" class="button button--secondary">Saga</button>
+      </div>
+
+      <div class="travel-dash-board" id="travel-dash-board">
+        <div class="travel-dash-hud" id="dash-hud">Pist hazir. Baslat ve kosturmaya basla.</div>
+        <div class="travel-dash-sky"></div>
+        <div class="travel-dash-road">
+          <div class="travel-dash-lane"></div>
+          <div class="travel-dash-lane"></div>
+          <div class="travel-dash-lane"></div>
+          <div class="travel-dash-lane"></div>
+          <div class="travel-dash-items" id="dash-items"></div>
+          <div class="travel-dash-player lane-center" id="dash-player">
+            <div class="travel-dash-player__body"></div>
+            <div class="travel-dash-player__shadow"></div>
+          </div>
+        </div>
+      </div>
+      <p class="game-note">Masaustu: sol ve sag ok tuslari. Mobil: ekrandaki butonlar.</p>
+    </section>
   </div>
 </section>
 
@@ -150,6 +198,12 @@
       <div class="article-card__body">
         <h3>Perfect Landing</h3>
         <p>Zamanlama oyunu. Hareketli gostergede hedef bolgeyi tutturup yumusak inis yap.</p>
+      </div>
+    </article>
+    <article class="article-card">
+      <div class="article-card__body">
+        <h3>Travel Dash</h3>
+        <p>Sahte 3D runner. Yol perspektifinde ilerlerken seyahat biletlerini topla ve engellere carpmadan ak.</p>
       </div>
     </article>
   </div>
@@ -422,8 +476,172 @@
       syncBest();
     };
 
+    const initTravelDash = () => {
+      const board = document.getElementById("travel-dash-board");
+      const itemsLayer = document.getElementById("dash-items");
+      const player = document.getElementById("dash-player");
+      const hud = document.getElementById("dash-hud");
+      const startButton = document.getElementById("start-dash-game");
+      const leftButton = document.getElementById("dash-left");
+      const rightButton = document.getElementById("dash-right");
+      const scoreEl = document.getElementById("dash-score");
+      const timerEl = document.getElementById("dash-timer");
+      const bestEl = document.getElementById("dash-best");
+      if (!board || !itemsLayer || !player || !hud || !startButton || !leftButton || !rightButton || !scoreEl || !timerEl || !bestEl) return;
+
+      const BEST_KEY = "oneticketaway-travel-dash-best";
+      const lanes = ["lane-left", "lane-center", "lane-right"];
+      let laneIndex = 1;
+      let score = 0;
+      let timeLeft = 45;
+      let playing = false;
+      let dashTimer = null;
+      let animationFrame = null;
+      let lastSpawn = 0;
+      let lastTick = 0;
+      let speed = 0.013;
+      const items = [];
+
+      const syncBest = () => {
+        bestEl.textContent = String(Number(window.localStorage.getItem(BEST_KEY) || 0));
+      };
+
+      const setLane = (nextLane) => {
+        laneIndex = Math.max(0, Math.min(2, nextLane));
+        player.classList.remove(...lanes);
+        player.classList.add(lanes[laneIndex]);
+      };
+
+      const laneToX = (index) => [20, 50, 80][index];
+
+      const spawnItem = () => {
+        const lane = Math.floor(Math.random() * 3);
+        const collectible = Math.random() > 0.35;
+        const element = document.createElement("div");
+        element.className = collectible ? "travel-dash-item travel-dash-item--ticket" : "travel-dash-item travel-dash-item--obstacle";
+        element.dataset.collectible = collectible ? "1" : "0";
+        element.dataset.lane = String(lane);
+        element.dataset.z = "0";
+        element.style.left = `${laneToX(lane)}%`;
+        itemsLayer.appendChild(element);
+        items.push({ element, lane, z: 0, collectible });
+      };
+
+      const cleanupItem = (item) => {
+        item.element.remove();
+      };
+
+      const finishGame = () => {
+        playing = false;
+        window.clearInterval(dashTimer);
+        dashTimer = null;
+        window.cancelAnimationFrame(animationFrame);
+        animationFrame = null;
+        startButton.textContent = "Tekrar Baslat";
+        hud.textContent = `Tur bitti. Skorun ${score}. Tekrar dene.`;
+
+        while (items.length) {
+          cleanupItem(items.pop());
+        }
+
+        const best = Number(window.localStorage.getItem(BEST_KEY) || 0);
+        if (score > best) {
+          window.localStorage.setItem(BEST_KEY, String(score));
+          bestEl.textContent = String(score);
+        }
+      };
+
+      const renderFrame = (timestamp) => {
+        if (!playing) return;
+        if (!lastSpawn) lastSpawn = timestamp;
+
+        if (timestamp - lastSpawn > 650) {
+          spawnItem();
+          lastSpawn = timestamp;
+        }
+
+        for (let index = items.length - 1; index >= 0; index -= 1) {
+          const item = items[index];
+          item.z += speed;
+          const scale = 0.35 + item.z * 1.15;
+          const translateY = item.z * 365;
+          item.element.style.transform = `translate(-50%, ${translateY}px) scale(${scale})`;
+          item.element.style.opacity = String(Math.min(1, 0.25 + item.z * 1.35));
+
+          if (item.z >= 0.92) {
+            if (item.lane === laneIndex) {
+              if (item.collectible) {
+                score += 20;
+                hud.textContent = "Bilet toplandi. Harika devam et.";
+              } else {
+                score = Math.max(0, score - 18);
+                timeLeft = Math.max(0, timeLeft - 3);
+                timerEl.textContent = String(timeLeft);
+                hud.textContent = "Engele carptin. Dikkat et.";
+              }
+              scoreEl.textContent = String(score);
+            }
+
+            cleanupItem(item);
+            items.splice(index, 1);
+          }
+        }
+
+        animationFrame = window.requestAnimationFrame(renderFrame);
+      };
+
+      const startGame = () => {
+        while (items.length) {
+          cleanupItem(items.pop());
+        }
+
+        laneIndex = 1;
+        setLane(1);
+        score = 0;
+        timeLeft = 45;
+        speed = 0.013;
+        lastSpawn = 0;
+        playing = true;
+        scoreEl.textContent = "0";
+        timerEl.textContent = "45";
+        hud.textContent = "Kostur! Biletleri topla, engellerden kac.";
+        startButton.textContent = "Oynaniyor...";
+
+        window.clearInterval(dashTimer);
+        dashTimer = window.setInterval(() => {
+          timeLeft -= 1;
+          timerEl.textContent = String(timeLeft);
+          speed += 0.00035;
+          if (timeLeft <= 0) finishGame();
+        }, 1000);
+
+        window.cancelAnimationFrame(animationFrame);
+        animationFrame = window.requestAnimationFrame(renderFrame);
+      };
+
+      startButton.addEventListener("click", () => {
+        if (playing) return;
+        startGame();
+      });
+
+      leftButton.addEventListener("click", () => setLane(laneIndex - 1));
+      rightButton.addEventListener("click", () => setLane(laneIndex + 1));
+
+      window.addEventListener("keydown", (event) => {
+        if (!playing) return;
+        if (event.key === "ArrowLeft") {
+          setLane(laneIndex - 1);
+        } else if (event.key === "ArrowRight") {
+          setLane(laneIndex + 1);
+        }
+      });
+
+      syncBest();
+    };
+
     initSkyChase();
     initMemoryRoute();
     initPerfectLanding();
+    initTravelDash();
   })();
 </script>

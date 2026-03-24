@@ -1,64 +1,155 @@
-<% content_for :title, "Game | OneTicketAway" %>
-<% content_for :meta_description, "OneTicketAway icin hazirlanan kucuk tarayici oyunu. Hedefleri topla ve 30 saniyede en yuksek skora ulasmaya calis." %>
+<% content_for :title, "Games | OneTicketAway" %>
+<% content_for :meta_description, "OneTicketAway mini arcade. Birden fazla kucuk tarayici oyunu ile hiz, hafiza ve zamanlama becerini test et." %>
 
-<section class="game-hero">
+<section class="game-hero game-hero--arcade">
   <div class="game-hero__copy">
-    <p class="eyebrow">Mini Game</p>
-    <h1>Sky Chase</h1>
-    <p>30 saniye boyunca harita uzerinde beliren hedefleri yakala. Kucuk hedef daha fazla puan verir, kacirirsan zaman kaybedersin.</p>
+    <p class="eyebrow">Mini Arcade</p>
+    <h1>Play Room</h1>
+    <p>Burada tek oyun yerine kucuk bir arcade var. Farkli modlar arasinda gec, en yuksek skoru kovala ve keyifli bir mola ver.</p>
 
-    <div class="game-stats">
-      <div class="game-stat">
-        <span>Skor</span>
-        <strong id="score">0</strong>
-      </div>
-      <div class="game-stat">
-        <span>Sure</span>
-        <strong id="timer">30</strong>
-      </div>
-      <div class="game-stat">
-        <span>En iyi</span>
-        <strong id="best-score">0</strong>
-      </div>
+    <div class="game-selector" role="tablist" aria-label="Oyun sec">
+      <button type="button" class="game-selector__button is-active" data-game-tab="sky-chase">Sky Chase</button>
+      <button type="button" class="game-selector__button" data-game-tab="memory-route">Memory Route</button>
+      <button type="button" class="game-selector__button" data-game-tab="perfect-landing">Perfect Landing</button>
     </div>
 
     <div class="actions">
-      <button type="button" id="start-game">Oyunu Baslat</button>
       <%= link_to "Ana sayfaya don", root_path, class: "button button--secondary" %>
     </div>
   </div>
 
-  <div class="game-hero__panel">
-    <div class="game-board" id="game-board" aria-live="polite">
-      <div class="game-board__overlay" id="game-overlay">
-        <strong>Hazir misin?</strong>
-        <span>Baslat'a tikla ve hedefleri yakala.</span>
+  <div class="game-hero__panel game-hero__panel--stack">
+    <section class="game-pane is-active" id="game-sky-chase" data-game-pane="sky-chase">
+      <div class="game-pane__header">
+        <div>
+          <p class="eyebrow">Speed</p>
+          <h2>Sky Chase</h2>
+          <p>30 saniye boyunca beliren hedefleri yakala. Kucuk hedef daha fazla puan getirir.</p>
+        </div>
+        <div class="game-stats">
+          <div class="game-stat">
+            <span>Skor</span>
+            <strong id="sky-score">0</strong>
+          </div>
+          <div class="game-stat">
+            <span>Sure</span>
+            <strong id="sky-timer">30</strong>
+          </div>
+          <div class="game-stat">
+            <span>En iyi</span>
+            <strong id="sky-best-score">0</strong>
+          </div>
+        </div>
       </div>
-      <button type="button" class="target target--hidden" id="target" aria-label="Target"></button>
-    </div>
+
+      <div class="actions">
+        <button type="button" id="start-sky-game">Oyunu Baslat</button>
+      </div>
+
+      <div class="game-board" id="sky-game-board" aria-live="polite">
+        <div class="game-board__overlay" id="sky-game-overlay">
+          <strong>Hazir misin?</strong>
+          <span>Baslat'a tikla ve hedefleri yakala.</span>
+        </div>
+        <button type="button" class="target target--hidden" id="sky-target" aria-label="Target"></button>
+      </div>
+    </section>
+
+    <section class="game-pane" id="game-memory-route" data-game-pane="memory-route">
+      <div class="game-pane__header">
+        <div>
+          <p class="eyebrow">Memory</p>
+          <h2>Memory Route</h2>
+          <p>Işık sırasını aklında tut, sonra karelere ayni sirayla bas. Her turda dizi bir adim uzar.</p>
+        </div>
+        <div class="game-stats">
+          <div class="game-stat">
+            <span>Seviye</span>
+            <strong id="memory-level">0</strong>
+          </div>
+          <div class="game-stat">
+            <span>Hamle</span>
+            <strong id="memory-step">0</strong>
+          </div>
+          <div class="game-stat">
+            <span>En iyi</span>
+            <strong id="memory-best">0</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" id="start-memory-game">Diziyi Baslat</button>
+      </div>
+
+      <div class="memory-board" id="memory-board">
+        <button type="button" class="memory-tile memory-tile--1" data-memory-tile="0" aria-label="Birinci kare"></button>
+        <button type="button" class="memory-tile memory-tile--2" data-memory-tile="1" aria-label="Ikinci kare"></button>
+        <button type="button" class="memory-tile memory-tile--3" data-memory-tile="2" aria-label="Ucuncu kare"></button>
+        <button type="button" class="memory-tile memory-tile--4" data-memory-tile="3" aria-label="Dorduncu kare"></button>
+      </div>
+      <p class="game-note" id="memory-note">Baslat'a tikla, sirayi izle ve tekrar et.</p>
+    </section>
+
+    <section class="game-pane" id="game-perfect-landing" data-game-pane="perfect-landing">
+      <div class="game-pane__header">
+        <div>
+          <p class="eyebrow">Timing</p>
+          <h2>Perfect Landing</h2>
+          <p>Gosterge hareket ederken butona bas ve ucagi hedef bolgede indir. Uca yaklastikca daha cok puan alirsin.</p>
+        </div>
+        <div class="game-stats">
+          <div class="game-stat">
+            <span>Skor</span>
+            <strong id="landing-score">0</strong>
+          </div>
+          <div class="game-stat">
+            <span>Tur</span>
+            <strong id="landing-round">0</strong>
+          </div>
+          <div class="game-stat">
+            <span>En iyi</span>
+            <strong id="landing-best">0</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" id="start-landing-game">Pisti Ac</button>
+        <button type="button" id="stop-landing-game" class="button button--secondary" disabled>Indir</button>
+      </div>
+
+      <div class="landing-board">
+        <div class="landing-track">
+          <div class="landing-track__target"></div>
+          <div class="landing-track__marker" id="landing-marker"></div>
+        </div>
+      </div>
+      <p class="game-note" id="landing-note">Baslat'a tikla, cizgi akmaya baslasin. Hedef bolgeye gelince indir.</p>
+    </section>
   </div>
 </section>
 
 <section class="panel panel--spacious game-instructions">
-  <p class="eyebrow">Nasil Oynanir</p>
-  <h2 class="page-title">Kurallar basit</h2>
+  <p class="eyebrow">Arcade Listesi</p>
+  <h2 class="page-title">Birden fazla oyun, tek sayfa</h2>
   <div class="article-grid">
     <article class="article-card">
       <div class="article-card__body">
-        <h3>1. Baslat</h3>
-        <p>Butona bastiginda sayaç calismaya baslar ve ilk hedef ekranda belirir.</p>
+        <h3>Sky Chase</h3>
+        <p>Refleks oyunu. Hedefleri hizli yakala, kacirmadan sureyi iyi kullan.</p>
       </div>
     </article>
     <article class="article-card">
       <div class="article-card__body">
-        <h3>2. Topla</h3>
-        <p>Hedefe ne kadar hizli tiklarsan o kadar cok puan kazanirsin. Kucuk hedef daha degerlidir.</p>
+        <h3>Memory Route</h3>
+        <p>Hafiza oyunu. Yanan kareleri dogru sirayla tekrar ederek seviyeleri gec.</p>
       </div>
     </article>
     <article class="article-card">
       <div class="article-card__body">
-        <h3>3. Rekor kir</h3>
-        <p>Oyun sonunda skorun tarayicida saklanir. Tekrar oynayip kendi rekorunu gecmeye calis.</p>
+        <h3>Perfect Landing</h3>
+        <p>Zamanlama oyunu. Hareketli gostergede hedef bolgeyi tutturup yumusak inis yap.</p>
       </div>
     </article>
   </div>
@@ -66,109 +157,273 @@
 
 <script>
   (() => {
-    const board = document.getElementById("game-board");
-    const target = document.getElementById("target");
-    const overlay = document.getElementById("game-overlay");
-    const scoreEl = document.getElementById("score");
-    const timerEl = document.getElementById("timer");
-    const bestEl = document.getElementById("best-score");
-    const startButton = document.getElementById("start-game");
+    const tabs = Array.from(document.querySelectorAll("[data-game-tab]"));
+    const panes = Array.from(document.querySelectorAll("[data-game-pane]"));
 
-    if (!board || !target || !overlay || !scoreEl || !timerEl || !bestEl || !startButton) return;
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const selected = tab.dataset.gameTab;
+        tabs.forEach((item) => item.classList.toggle("is-active", item === tab));
+        panes.forEach((pane) => pane.classList.toggle("is-active", pane.dataset.gamePane === selected));
+      });
+    });
 
-    const BEST_KEY = "oneticketaway-sky-chase-best";
-    let score = 0;
-    let timeLeft = 30;
-    let gameTimer = null;
-    let playing = false;
+    const initSkyChase = () => {
+      const board = document.getElementById("sky-game-board");
+      const target = document.getElementById("sky-target");
+      const overlay = document.getElementById("sky-game-overlay");
+      const scoreEl = document.getElementById("sky-score");
+      const timerEl = document.getElementById("sky-timer");
+      const bestEl = document.getElementById("sky-best-score");
+      const startButton = document.getElementById("start-sky-game");
+      if (!board || !target || !overlay || !scoreEl || !timerEl || !bestEl || !startButton) return;
 
-    const syncBestScore = () => {
-      const bestScore = Number(window.localStorage.getItem(BEST_KEY) || 0);
-      bestEl.textContent = String(bestScore);
-      return bestScore;
-    };
+      const BEST_KEY = "oneticketaway-sky-chase-best";
+      let score = 0;
+      let timeLeft = 30;
+      let gameTimer = null;
+      let playing = false;
 
-    const randomBetween = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+      const syncBestScore = () => {
+        const bestScore = Number(window.localStorage.getItem(BEST_KEY) || 0);
+        bestEl.textContent = String(bestScore);
+        return bestScore;
+      };
 
-    const moveTarget = () => {
-      const boardRect = board.getBoundingClientRect();
-      const size = randomBetween(44, 86);
-      const maxLeft = Math.max(boardRect.width - size - 20, 20);
-      const maxTop = Math.max(boardRect.height - size - 20, 20);
+      const randomBetween = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-      target.style.width = `${size}px`;
-      target.style.height = `${size}px`;
-      target.style.left = `${randomBetween(12, maxLeft)}px`;
-      target.style.top = `${randomBetween(12, maxTop)}px`;
-      target.dataset.points = String(Math.max(6, Math.round(100 / size * 7)));
-      target.classList.remove("target--hidden");
-    };
+      const moveTarget = () => {
+        const boardRect = board.getBoundingClientRect();
+        const size = randomBetween(44, 86);
+        const maxLeft = Math.max(boardRect.width - size - 20, 20);
+        const maxTop = Math.max(boardRect.height - size - 20, 20);
 
-    const finishGame = () => {
-      playing = false;
-      clearInterval(gameTimer);
-      gameTimer = null;
-      target.classList.add("target--hidden");
+        target.style.width = `${size}px`;
+        target.style.height = `${size}px`;
+        target.style.left = `${randomBetween(12, maxLeft)}px`;
+        target.style.top = `${randomBetween(12, maxTop)}px`;
+        target.dataset.points = String(Math.max(6, Math.round(100 / size * 7)));
+        target.classList.remove("target--hidden");
+      };
 
-      const best = syncBestScore();
-      if (score > best) {
-        window.localStorage.setItem(BEST_KEY, String(score));
-        bestEl.textContent = String(score);
-      }
+      const finishGame = () => {
+        playing = false;
+        clearInterval(gameTimer);
+        gameTimer = null;
+        target.classList.add("target--hidden");
 
-      overlay.innerHTML = `<strong>Oyun bitti</strong><span>Skorun ${score}. Tekrar dene ve rekorunu gelistir.</span>`;
-      overlay.classList.remove("game-board__overlay--hidden");
-      startButton.textContent = "Tekrar Oyna";
-    };
-
-    const startGame = () => {
-      score = 0;
-      timeLeft = 30;
-      playing = true;
-      scoreEl.textContent = "0";
-      timerEl.textContent = "30";
-      overlay.classList.add("game-board__overlay--hidden");
-      startButton.textContent = "Oynaniyor...";
-      moveTarget();
-
-      clearInterval(gameTimer);
-      gameTimer = window.setInterval(() => {
-        timeLeft -= 1;
-        timerEl.textContent = String(timeLeft);
-
-        if (timeLeft <= 0) {
-          finishGame();
+        const best = syncBestScore();
+        if (score > best) {
+          window.localStorage.setItem(BEST_KEY, String(score));
+          bestEl.textContent = String(score);
         }
-      }, 1000);
+
+        overlay.innerHTML = `<strong>Oyun bitti</strong><span>Skorun ${score}. Tekrar dene ve rekorunu gelistir.</span>`;
+        overlay.classList.remove("game-board__overlay--hidden");
+        startButton.textContent = "Tekrar Oyna";
+      };
+
+      const startGame = () => {
+        score = 0;
+        timeLeft = 30;
+        playing = true;
+        scoreEl.textContent = "0";
+        timerEl.textContent = "30";
+        overlay.classList.add("game-board__overlay--hidden");
+        startButton.textContent = "Oynaniyor...";
+        moveTarget();
+
+        clearInterval(gameTimer);
+        gameTimer = window.setInterval(() => {
+          timeLeft -= 1;
+          timerEl.textContent = String(timeLeft);
+          if (timeLeft <= 0) finishGame();
+        }, 1000);
+      };
+
+      startButton.addEventListener("click", () => {
+        if (playing) return;
+        startGame();
+      });
+
+      target.addEventListener("click", () => {
+        if (!playing) return;
+        score += Number(target.dataset.points || 10);
+        scoreEl.textContent = String(score);
+        moveTarget();
+      });
+
+      board.addEventListener("click", (event) => {
+        if (!playing || event.target === target) return;
+        score = Math.max(0, score - 5);
+        timeLeft = Math.max(0, timeLeft - 1);
+        scoreEl.textContent = String(score);
+        timerEl.textContent = String(timeLeft);
+        if (timeLeft <= 0) finishGame();
+      });
+
+      syncBestScore();
     };
 
-    startButton.addEventListener("click", () => {
-      if (playing) return;
-      startGame();
-    });
+    const initMemoryRoute = () => {
+      const tiles = Array.from(document.querySelectorAll("[data-memory-tile]"));
+      const startButton = document.getElementById("start-memory-game");
+      const levelEl = document.getElementById("memory-level");
+      const stepEl = document.getElementById("memory-step");
+      const bestEl = document.getElementById("memory-best");
+      const noteEl = document.getElementById("memory-note");
+      if (!tiles.length || !startButton || !levelEl || !stepEl || !bestEl || !noteEl) return;
 
-    target.addEventListener("click", () => {
-      if (!playing) return;
+      const BEST_KEY = "oneticketaway-memory-route-best";
+      let sequence = [];
+      let playerIndex = 0;
+      let locked = true;
 
-      score += Number(target.dataset.points || 10);
-      scoreEl.textContent = String(score);
-      moveTarget();
-    });
+      const best = () => Number(window.localStorage.getItem(BEST_KEY) || 0);
+      const syncBest = () => { bestEl.textContent = String(best()); };
+      const randomIndex = () => Math.floor(Math.random() * tiles.length);
 
-    board.addEventListener("click", (event) => {
-      if (!playing) return;
-      if (event.target === target) return;
+      const flashTile = (index) => {
+        const tile = tiles[index];
+        if (!tile) return;
+        tile.classList.add("is-lit");
+        window.setTimeout(() => tile.classList.remove("is-lit"), 380);
+      };
 
-      score = Math.max(0, score - 5);
-      timeLeft = Math.max(0, timeLeft - 1);
-      scoreEl.textContent = String(score);
-      timerEl.textContent = String(timeLeft);
+      const playSequence = () => {
+        locked = true;
+        noteEl.textContent = "Sirayi izle...";
+        sequence.forEach((tileIndex, idx) => {
+          window.setTimeout(() => flashTile(tileIndex), 550 * (idx + 1));
+        });
+        window.setTimeout(() => {
+          locked = false;
+          playerIndex = 0;
+          stepEl.textContent = "1";
+          noteEl.textContent = "Simdi sen tekrar et.";
+        }, 550 * (sequence.length + 1));
+      };
 
-      if (timeLeft <= 0) {
-        finishGame();
-      }
-    });
+      const nextRound = () => {
+        sequence.push(randomIndex());
+        levelEl.textContent = String(sequence.length);
+        stepEl.textContent = "0";
+        playSequence();
+      };
 
-    syncBestScore();
+      const fail = () => {
+        const currentBest = best();
+        if (sequence.length - 1 > currentBest) {
+          window.localStorage.setItem(BEST_KEY, String(sequence.length - 1));
+          syncBest();
+        }
+        noteEl.textContent = `Yanlis kare. Ulastigin seviye ${Math.max(sequence.length - 1, 0)}. Tekrar baslat.`;
+        locked = true;
+      };
+
+      startButton.addEventListener("click", () => {
+        sequence = [];
+        playerIndex = 0;
+        locked = true;
+        noteEl.textContent = "Hazirlaniyor...";
+        nextRound();
+      });
+
+      tiles.forEach((tile, index) => {
+        tile.addEventListener("click", () => {
+          if (locked) return;
+          flashTile(index);
+
+          if (sequence[playerIndex] !== index) {
+            fail();
+            return;
+          }
+
+          playerIndex += 1;
+          stepEl.textContent = String(playerIndex + 1);
+
+          if (playerIndex >= sequence.length) {
+            noteEl.textContent = "Dogru! Yeni tur geliyor.";
+            locked = true;
+            window.setTimeout(nextRound, 700);
+          }
+        });
+      });
+
+      syncBest();
+    };
+
+    const initPerfectLanding = () => {
+      const marker = document.getElementById("landing-marker");
+      const startButton = document.getElementById("start-landing-game");
+      const stopButton = document.getElementById("stop-landing-game");
+      const scoreEl = document.getElementById("landing-score");
+      const roundEl = document.getElementById("landing-round");
+      const bestEl = document.getElementById("landing-best");
+      const noteEl = document.getElementById("landing-note");
+      if (!marker || !startButton || !stopButton || !scoreEl || !roundEl || !bestEl || !noteEl) return;
+
+      const BEST_KEY = "oneticketaway-perfect-landing-best";
+      let running = false;
+      let frameId = null;
+      let direction = 1;
+      let pos = 0;
+      let score = 0;
+      let round = 0;
+
+      const syncBest = () => {
+        bestEl.textContent = String(Number(window.localStorage.getItem(BEST_KEY) || 0));
+      };
+
+      const animate = () => {
+        pos += direction * 1.8;
+        if (pos >= 92) direction = -1;
+        if (pos <= 0) direction = 1;
+        marker.style.left = `${pos}%`;
+        frameId = window.requestAnimationFrame(animate);
+      };
+
+      const stopRound = () => {
+        running = false;
+        startButton.disabled = false;
+        stopButton.disabled = true;
+        window.cancelAnimationFrame(frameId);
+
+        const distanceFromCenter = Math.abs(pos - 50);
+        const points = Math.max(0, 100 - Math.round(distanceFromCenter * 3.2));
+        score += points;
+        round += 1;
+
+        scoreEl.textContent = String(score);
+        roundEl.textContent = String(round);
+        noteEl.textContent = points >= 85 ? "Mukemmel inis!" : points >= 55 ? "Iyi bir inis." : "Sert inis, bir tur daha dene.";
+
+        const best = Number(window.localStorage.getItem(BEST_KEY) || 0);
+        if (score > best) {
+          window.localStorage.setItem(BEST_KEY, String(score));
+          bestEl.textContent = String(score);
+        }
+      };
+
+      startButton.addEventListener("click", () => {
+        if (running) return;
+        running = true;
+        startButton.disabled = true;
+        stopButton.disabled = false;
+        noteEl.textContent = "Gostergede hedef bolgeyi yakala.";
+        frameId = window.requestAnimationFrame(animate);
+      });
+
+      stopButton.addEventListener("click", () => {
+        if (!running) return;
+        stopRound();
+      });
+
+      syncBest();
+    };
+
+    initSkyChase();
+    initMemoryRoute();
+    initPerfectLanding();
   })();
 </script>

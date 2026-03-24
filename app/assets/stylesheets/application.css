@@ -980,6 +980,170 @@ input[type="submit"]:hover {
   aspect-ratio: 16 / 9;
 }
 
+.football-panel {
+  padding: 1.1rem;
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.35), transparent 25%),
+    linear-gradient(180deg, #10223d 0%, #0a1627 100%);
+}
+
+.football-pitch {
+  position: relative;
+  min-height: 520px;
+  overflow: hidden;
+  border-radius: 26px;
+  background:
+    linear-gradient(180deg, #1c4f2f 0%, #2b7a46 32%, #3fa55f 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.football-crowd {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 24%;
+  background:
+    radial-gradient(circle at 10% 50%, #1d2d44 0 10px, transparent 11px),
+    radial-gradient(circle at 20% 30%, #823329 0 8px, transparent 9px),
+    radial-gradient(circle at 35% 52%, #d1b36a 0 9px, transparent 10px),
+    radial-gradient(circle at 52% 36%, #3f6aa0 0 8px, transparent 9px),
+    radial-gradient(circle at 70% 50%, #8f2d56 0 10px, transparent 11px),
+    radial-gradient(circle at 86% 35%, #ef8354 0 8px, transparent 9px),
+    linear-gradient(180deg, #10223d 0%, #1a304f 100%);
+}
+
+.football-goal {
+  position: absolute;
+  left: 50%;
+  top: 14%;
+  width: 68%;
+  height: 45%;
+  transform: translateX(-50%);
+  border: 8px solid #f7fafc;
+  border-bottom-width: 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.goal-net {
+  position: absolute;
+  inset: 0;
+}
+
+.goal-net--vertical {
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.18) 0 2px,
+    transparent 2px 34px
+  );
+}
+
+.goal-net--horizontal {
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.18) 0 2px,
+    transparent 2px 28px
+  );
+}
+
+.football-keeper {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  width: 120px;
+  height: 140px;
+  transform: translateX(-50%);
+  transition: left 0.28s ease;
+}
+
+.football-keeper.keeper-left { left: 26%; }
+.football-keeper.keeper-center { left: 50%; }
+.football-keeper.keeper-right { left: 74%; }
+
+.football-keeper__body {
+  position: absolute;
+  inset: 18px 24px 0;
+  border-radius: 22px 22px 14px 14px;
+  background: linear-gradient(180deg, #f6ad55 0%, #dd6b20 100%);
+  box-shadow: 0 16px 26px rgba(0, 0, 0, 0.18);
+}
+
+.football-keeper__body::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -24px;
+  width: 42px;
+  height: 42px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: #f4c095;
+}
+
+.football-keeper__glove {
+  position: absolute;
+  top: 36px;
+  width: 28px;
+  height: 22px;
+  border-radius: 999px;
+  background: #f7fafc;
+}
+
+.football-keeper__glove--left { left: 4px; transform: rotate(-16deg); }
+.football-keeper__glove--right { right: 4px; transform: rotate(16deg); }
+
+.football-ball {
+  position: absolute;
+  left: 50%;
+  bottom: 10%;
+  width: 42px;
+  height: 42px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 30% 30%, #ffffff 0%, #f4f4f4 60%, #d9d9d9 100%);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.22);
+  transition: left 0.38s ease, bottom 0.52s ease, transform 0.52s ease;
+}
+
+.football-ball::after {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 999px;
+  border: 3px solid rgba(17, 24, 39, 0.2);
+}
+
+.football-ball.ball-left { left: 26%; }
+.football-ball.ball-center { left: 50%; }
+.football-ball.ball-right { left: 74%; }
+
+.football-ball.ball-shot {
+  bottom: 56%;
+  transform: translateX(-50%) scale(0.8);
+}
+
+.football-targets {
+  position: absolute;
+  left: 50%;
+  bottom: 10%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.8rem;
+  z-index: 4;
+}
+
+.football-target {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #10223d;
+}
+
+.football-target:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .game-instructions h3 {
   margin-top: 0;
 }
@@ -1025,5 +1189,15 @@ input[type="submit"]:hover {
 
   .travel-dash-board {
     min-height: 420px;
+  }
+
+  .football-pitch {
+    min-height: 420px;
+  }
+
+  .football-targets {
+    flex-wrap: wrap;
+    width: calc(100% - 2rem);
+    justify-content: center;
   }
 }

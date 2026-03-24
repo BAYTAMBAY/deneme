@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   root "pages#home"
   get "game", to: "games#show"
+  get "football", to: "footballs#show"
 
   resources :posts, only: [:show], path: "blog"
 

@@ -1,0 +1,193 @@
+<% content_for :title, "Football | OneTicketAway" %>
+<% content_for :meta_description, "OneTicketAway icin hazirlanan futbol mini oyunu. Penaltida dogru koseyi sec, kaleciyi sasirt ve seri yap." %>
+
+<section class="game-hero football-hero">
+  <div class="game-hero__copy">
+    <p class="eyebrow">Football Mode</p>
+    <h1>Penalty Club</h1>
+    <p>Topu kalenin bir kosesine gonder, kaleciyi sasirt ve seri yap. Her gol puan kazandirir, kurtaris seriyi bozar.</p>
+
+    <div class="game-stats">
+      <div class="game-stat">
+        <span>Gol</span>
+        <strong id="football-score">0</strong>
+      </div>
+      <div class="game-stat">
+        <span>Seri</span>
+        <strong id="football-streak">0</strong>
+      </div>
+      <div class="game-stat">
+        <span>En iyi</span>
+        <strong id="football-best">0</strong>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" id="football-start">Oyunu Baslat</button>
+      <%= link_to "Ana sayfaya don", root_path, class: "button button--secondary" %>
+    </div>
+
+    <p class="game-note" id="football-note">Baslat'a tikla, sonra sol-orta-sag hedeflerinden birini sec.</p>
+  </div>
+
+  <div class="game-hero__panel football-panel">
+    <div class="football-pitch" id="football-pitch">
+      <div class="football-crowd"></div>
+      <div class="football-goal">
+        <div class="goal-net goal-net--vertical"></div>
+        <div class="goal-net goal-net--horizontal"></div>
+        <div class="football-keeper keeper-center" id="football-keeper">
+          <div class="football-keeper__body"></div>
+          <div class="football-keeper__glove football-keeper__glove--left"></div>
+          <div class="football-keeper__glove football-keeper__glove--right"></div>
+        </div>
+        <div class="football-ball ball-center" id="football-ball"></div>
+      </div>
+
+      <div class="football-targets">
+        <button type="button" class="football-target" data-shot="left">Sol</button>
+        <button type="button" class="football-target" data-shot="center">Orta</button>
+        <button type="button" class="football-target" data-shot="right">Sag</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="panel panel--spacious game-instructions">
+  <p class="eyebrow">Nasil Oynanir</p>
+  <h2 class="page-title">Uc hedef, tek sans</h2>
+  <div class="article-grid">
+    <article class="article-card">
+      <div class="article-card__body">
+        <h3>Baslat</h3>
+        <p>Ilk vurus icin oyunu baslat. Kaleci her tur farkli yone kayabilir.</p>
+      </div>
+    </article>
+    <article class="article-card">
+      <div class="article-card__body">
+        <h3>Koseyi sec</h3>
+        <p>Sol, orta veya sag sec. Dogru anda iyi secim yaparsan seri yaparsin.</p>
+      </div>
+    </article>
+    <article class="article-card">
+      <div class="article-card__body">
+        <h3>Rekoru kir</h3>
+        <p>En iyi seri tarayicida saklanir. Her yeni oyunda daha iyisini deneyebilirsin.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const startButton = document.getElementById("football-start");
+    const noteEl = document.getElementById("football-note");
+    const scoreEl = document.getElementById("football-score");
+    const streakEl = document.getElementById("football-streak");
+    const bestEl = document.getElementById("football-best");
+    const keeper = document.getElementById("football-keeper");
+    const ball = document.getElementById("football-ball");
+    const targets = Array.from(document.querySelectorAll("[data-shot]"));
+
+    if (!startButton || !noteEl || !scoreEl || !streakEl || !bestEl || !keeper || !ball || !targets.length) return;
+
+    const BEST_KEY = "oneticketaway-football-best";
+    const targetClasses = {
+      left: "ball-left",
+      center: "ball-center",
+      right: "ball-right"
+    };
+    const keeperClasses = {
+      left: "keeper-left",
+      center: "keeper-center",
+      right: "keeper-right"
+    };
+
+    let playing = false;
+    let score = 0;
+    let streak = 0;
+    let keeperSide = "center";
+
+    const syncBest = () => {
+      bestEl.textContent = String(Number(window.localStorage.getItem(BEST_KEY) || 0));
+    };
+
+    const setTargetsEnabled = (enabled) => {
+      targets.forEach((target) => {
+        target.disabled = !enabled;
+      });
+    };
+
+    const resetBall = () => {
+      ball.classList.remove("ball-left", "ball-center", "ball-right", "ball-shot");
+      ball.classList.add("ball-center");
+    };
+
+    const moveKeeper = () => {
+      const sides = ["left", "center", "right"];
+      keeperSide = sides[Math.floor(Math.random() * sides.length)];
+      keeper.classList.remove("keeper-left", "keeper-center", "keeper-right");
+      keeper.classList.add(keeperClasses[keeperSide]);
+    };
+
+    const updateScores = () => {
+      scoreEl.textContent = String(score);
+      streakEl.textContent = String(streak);
+    };
+
+    const endTurn = (goal) => {
+      const best = Number(window.localStorage.getItem(BEST_KEY) || 0);
+      if (streak > best) {
+        window.localStorage.setItem(BEST_KEY, String(streak));
+        bestEl.textContent = String(streak);
+      }
+
+      if (goal) {
+        score += 1;
+        streak += 1;
+        noteEl.textContent = "Gol! Bir sonraki sut icin yeni kose sec.";
+      } else {
+        streak = 0;
+        noteEl.textContent = "Kaleci cikardi. Seriyi yeniden baslat.";
+      }
+
+      updateScores();
+      setTargetsEnabled(true);
+      resetBall();
+      moveKeeper();
+    };
+
+    const shoot = (side) => {
+      if (!playing) return;
+
+      setTargetsEnabled(false);
+      resetBall();
+      ball.classList.add(targetClasses[side], "ball-shot");
+
+      window.setTimeout(() => {
+        const goal = side !== keeperSide;
+        endTurn(goal);
+      }, 650);
+    };
+
+    startButton.addEventListener("click", () => {
+      playing = true;
+      score = 0;
+      streak = 0;
+      updateScores();
+      syncBest();
+      resetBall();
+      moveKeeper();
+      setTargetsEnabled(true);
+      noteEl.textContent = "Kaleci hazir. Sol, orta ya da sag sec.";
+      startButton.textContent = "Yeniden Baslat";
+    });
+
+    targets.forEach((target) => {
+      target.addEventListener("click", () => shoot(target.dataset.shot));
+    });
+
+    syncBest();
+    setTargetsEnabled(false);
+  })();
+</script>

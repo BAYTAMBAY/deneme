@@ -7,6 +7,10 @@
   <p>Bu alan her gun bot tarafindan guncellenir. Gunun one cikan basliklari otomatik cekilir ve tek sayfada listelenir.</p>
 </section>
 
+<% if @briefing_error.present? %>
+  <div class="flash flash--alert"><%= @briefing_error %></div>
+<% end %>
+
 <% if @latest_briefing.present? %>
   <section class="panel panel--spacious briefing-layout">
     <article class="briefing-main">
@@ -17,6 +21,12 @@
         <span class="briefing-separator">•</span>
         <strong>Kaynak:</strong> <a href="<%= @latest_briefing.source_url %>" target="_blank" rel="noopener noreferrer"><%= @latest_briefing.source_name %></a>
       </p>
+
+      <% if @latest_briefing.published_on < Date.current %>
+        <div class="flash flash--alert">
+          Guncel kayit henuz olusmadi. En son basarili gundem kaydi gosteriliyor.
+        </div>
+      <% end %>
 
       <div class="article-content briefing-summary-card">
         <p><strong><%= @latest_briefing.summary %></strong></p>

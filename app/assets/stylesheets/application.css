@@ -239,6 +239,260 @@ img {
   box-shadow: var(--shadow-strong);
 }
 
+.tree-calculator h1 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.1;
+}
+
+.tree-calculator__intro {
+  max-width: 48rem;
+  margin: 0 0 1.75rem;
+  color: var(--text-muted);
+  font-size: 1.02rem;
+}
+
+.tree-calculator__form {
+  display: grid;
+  gap: 1rem;
+}
+
+.tree-calculator__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.tree-calculator__form label {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.tree-calculator__form input {
+  width: 100%;
+  min-height: 52px;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: #fffdf9;
+  color: var(--text);
+  font: inherit;
+}
+
+.tree-calculator__actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.tree-calculator__result {
+  margin-top: 1.5rem;
+}
+
+.tree-calculator__result-label {
+  margin: 0 0 0.45rem;
+  color: var(--accent);
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.tree-calculator__result h2 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  line-height: 1.2;
+}
+
+.frame-preview {
+  margin-top: 1.5rem;
+}
+
+.frame-preview__track {
+  display: flex;
+  align-items: stretch;
+  min-height: 120px;
+  margin-top: 0.85rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, #fffaf2 0%, #f3eadf 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.frame-preview__frame {
+  position: relative;
+  min-width: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.65rem 0.2rem;
+  background:
+    linear-gradient(180deg, #1e5a66 0%, #143f47 100%);
+  border-inline: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.frame-preview__frame span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  min-height: 24px;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.frame-preview__frame small {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #143f47;
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.frame-preview__gap {
+  min-width: 44px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0.75rem 0.35rem;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(13, 107, 91, 0.03) 0,
+      rgba(13, 107, 91, 0.03) 18px,
+      rgba(255, 255, 255, 0.16) 18px,
+      rgba(255, 255, 255, 0.16) 36px
+    );
+}
+
+.frame-preview__gap span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  color: var(--text);
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.frame-preview__legend {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.85rem;
+  color: var(--text-muted);
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 0.88rem;
+}
+
+.frame-preview__measure {
+  margin-top: 0.9rem;
+}
+
+.frame-preview__measure-line {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 16px;
+}
+
+.frame-preview__measure-line::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 7px;
+  border-top: 2px solid rgba(31, 26, 22, 0.26);
+}
+
+.frame-preview__measure-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(31, 26, 22, 0.26), rgba(31, 26, 22, 0.26)) left 0 top 0 / 2px 16px no-repeat,
+    linear-gradient(rgba(31, 26, 22, 0.26), rgba(31, 26, 22, 0.26)) right 0 top 0 / 2px 16px no-repeat;
+}
+
+.frame-preview__measure-points {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--text-muted);
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 0.84rem;
+}
+
+.frame-preview__measure-points strong {
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.frame-preview__summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.95rem;
+}
+
+.frame-preview__summary-card {
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(13, 107, 91, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.frame-preview__summary-card span {
+  display: block;
+  color: var(--text-muted);
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.frame-preview__summary-card strong {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--text);
+  font-size: 1.15rem;
+}
+
+@media (max-width: 720px) {
+  .tree-calculator__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .frame-preview__summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .admin-hero {
   display: flex;
   align-items: flex-end;

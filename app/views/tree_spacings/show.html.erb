@@ -1,0 +1,110 @@
+<% content_for :title, "Frame Araligi Hesaplama | OneTicketAway" %>
+<% content_for :meta_description, "Toplam cm olcusu, frame sayisi ve frame kalinligina gore esit bosluk olcusunu hesapla." %>
+
+<section class="hero-card tree-calculator">
+  <p class="site-branding__eyebrow">Hesaplama Araci</p>
+  <h1>Frame Araligi Hesaplama</h1>
+  <p class="tree-calculator__intro">
+    Toplam uzunlugu cm cinsinden, frame sayisini ve her frame'in kalinligini gir. Ilk ve son noktada kesin frame oldugunu hesaba katarak aradaki esit bosluk olcusunu hesaplayalim.
+  </p>
+
+  <%= form_with url: frame_araligi_path, method: :get, local: true, class: "tree-calculator__form" do %>
+    <div class="tree-calculator__grid">
+      <div>
+        <label for="opening_width">Toplam uzunluk (cm)</label>
+        <%= number_field_tag :opening_width, @opening_width&.positive? ? @opening_width : nil, step: "0.01", min: "0.01", placeholder: "Ornek: 240", id: "opening_width" %>
+      </div>
+
+      <div>
+        <label for="frame_count">Frame sayisi</label>
+        <%= number_field_tag :frame_count, @frame_count&.positive? ? @frame_count : nil, step: "1", min: "2", placeholder: "Ornek: 5", id: "frame_count" %>
+      </div>
+
+      <div>
+        <label for="frame_thickness">Her frame kalinligi (cm)</label>
+        <%= number_field_tag :frame_thickness, @frame_thickness&.positive? ? @frame_thickness : nil, step: "0.01", min: "0.01", placeholder: "Ornek: 8", id: "frame_thickness" %>
+      </div>
+    </div>
+
+    <div class="tree-calculator__actions">
+      <button type="submit" class="nav-pill nav-pill--primary">Hesapla</button>
+    </div>
+  <% end %>
+
+  <% if @result.present? %>
+    <% if @result[:error].present? %>
+      <div class="flash flash--alert tree-calculator__result">
+        <strong>Hesaplanamadi.</strong>
+        <span><%= @result[:error] %></span>
+      </div>
+    <% else %>
+      <div class="tree-calculator__result panel panel--spacious">
+        <p class="tree-calculator__result-label">Sonuc</p>
+        <h2>Frame aralarini <%= number_with_precision(@result[:clear_spacing], precision: 2, strip_insignificant_zeros: true) %> cm boslukla yerlestirmelisin.</h2>
+        <p>
+          Toplam olcu
+          <strong><%= number_with_precision(@opening_width, precision: 2, strip_insignificant_zeros: true) %> cm</strong>.
+          <strong><%= @frame_count %> frame</strong> ve toplam
+          <strong><%= number_with_precision(@result[:total_frame_thickness], precision: 2, strip_insignificant_zeros: true) %> cm</strong>
+          frame kalinligi oldugunda, ilk ve son noktada frame bulundugu icin kalan alan
+          <strong><%= @result[:gap_count] %> esit bosluga</strong> bolunur ve her bosluk
+          <strong><%= number_with_precision(@result[:clear_spacing], precision: 2, strip_insignificant_zeros: true) %> cm</strong> olur.
+        </p>
+
+        <div class="frame-preview">
+          <p class="tree-calculator__result-label">Gorsel Onizleme</p>
+          <div class="frame-preview__track" aria-label="Frame yerlesim onizlemesi">
+            <% @frame_count.times do |index| %>
+              <div
+                class="frame-preview__frame"
+                style="flex-grow:<%= [@frame_thickness, 1].max %>;"
+                title="Frame <%= index + 1 %> - <%= number_with_precision(@frame_thickness, precision: 2, strip_insignificant_zeros: true) %> cm">
+                <span>F<%= index + 1 %></span>
+                <small><%= number_with_precision(@frame_thickness, precision: 2, strip_insignificant_zeros: true) %> cm</small>
+              </div>
+
+              <% if index < @result[:gap_count] %>
+                <div
+                  class="frame-preview__gap"
+                  style="flex-grow:<%= [@result[:clear_spacing], 1].max %>;"
+                  title="Bosluk <%= index + 1 %> - <%= number_with_precision(@result[:clear_spacing], precision: 2, strip_insignificant_zeros: true) %> cm">
+                  <span><%= number_with_precision(@result[:clear_spacing], precision: 2, strip_insignificant_zeros: true) %> cm</span>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+
+          <div class="frame-preview__measure">
+            <span class="frame-preview__measure-line"></span>
+            <div class="frame-preview__measure-points">
+              <span>0 cm</span>
+              <strong>Toplam: <%= number_with_precision(@opening_width, precision: 2, strip_insignificant_zeros: true) %> cm</strong>
+              <span><%= number_with_precision(@opening_width, precision: 2, strip_insignificant_zeros: true) %> cm</span>
+            </div>
+          </div>
+
+          <div class="frame-preview__summary-grid">
+            <div class="frame-preview__summary-card">
+              <span>Her frame</span>
+              <strong><%= number_with_precision(@frame_thickness, precision: 2, strip_insignificant_zeros: true) %> cm</strong>
+            </div>
+            <div class="frame-preview__summary-card">
+              <span>Her bosluk</span>
+              <strong><%= number_with_precision(@result[:clear_spacing], precision: 2, strip_insignificant_zeros: true) %> cm</strong>
+            </div>
+            <div class="frame-preview__summary-card">
+              <span>Toplam frame</span>
+              <strong><%= @frame_count %></strong>
+            </div>
+          </div>
+
+          <div class="frame-preview__legend">
+            <span><strong>Koyu bloklar:</strong> frame</span>
+            <span><strong>Acik alanlar:</strong> esit bosluklar</span>
+            <span><strong>F1, F2...</strong> frame numaralari</span>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</section>

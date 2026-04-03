@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   root "pages#home"
+  get "frame-araligi", to: "tree_spacings#show", as: :frame_araligi
   get "game", to: "games#show"
   get "football", to: "footballs#show"
   get "gundem", to: "daily_briefings#index"

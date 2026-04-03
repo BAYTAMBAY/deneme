@@ -5,6 +5,19 @@ class DailyBriefingsController < ApplicationController
     @recent_briefings = DailyBriefing.recent_first.limit(7)
   end
 
+  def refresh
+    DailyBriefingPublisher.call(date: Date.current)
+    redirect_to gundem_path, notice: "Bugunun gundemi guncellendi."
+  rescue StandardError => error
+    Rails.logger.warn("Daily briefing manual refresh failed: #{error.class} - #{error.message}")
+    redirect_to gundem_path, alert: "Gundem su an yenilenemedi. Biraz sonra tekrar dene."
+  end
+
+  def show
+    @briefing = DailyBriefing.find_by!(slug: params[:id])
+    @recent_briefings = DailyBriefing.recent_first.where.not(id: @briefing.id).limit(7)
+  end
+
   private
 
   def ensure_latest_briefing

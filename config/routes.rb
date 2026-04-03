@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   get "game", to: "games#show"
   get "football", to: "footballs#show"
   get "gundem", to: "daily_briefings#index"
+  post "gundem/guncelle", to: "daily_briefings#refresh", as: :refresh_daily_briefing
+  get "gundem/:id", to: "daily_briefings#show", as: :daily_briefing
 
   resources :posts, only: [:show], path: "blog"
 

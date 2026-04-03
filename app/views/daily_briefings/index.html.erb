@@ -5,6 +5,10 @@
   <p class="eyebrow">Gundem Botu</p>
   <h1>Gunluk Gundem Sayfasi</h1>
   <p>Bu alan her gun bot tarafindan guncellenir. Gunun one cikan basliklari otomatik cekilir ve tek sayfada listelenir.</p>
+
+  <% if @briefing_error.present? || @latest_briefing.blank? || @latest_briefing.published_on < Date.current %>
+    <%= button_to "Guncelle", refresh_daily_briefing_path, method: :post, class: "nav-pill nav-pill--primary" %>
+  <% end %>
 </section>
 
 <% if @briefing_error.present? %>
@@ -15,7 +19,7 @@
   <section class="panel panel--spacious briefing-layout">
     <article class="briefing-main">
       <p class="eyebrow">Bugunun Ozeti</p>
-      <h2 class="page-title"><%= @latest_briefing.title %></h2>
+      <h2 class="page-title"><%= link_to @latest_briefing.title, daily_briefing_path(@latest_briefing), class: "briefing-title-link" %></h2>
       <p class="article-meta">
         <strong>Tarih:</strong> <%= l(@latest_briefing.published_on, format: :long) %>
         <span class="briefing-separator">•</span>
@@ -33,7 +37,36 @@
       </div>
 
       <div class="article-content prose briefing-body-card">
-        <%= simple_format(@latest_briefing.body) %>
+        <% sections = @latest_briefing.body.to_s.split(/\n{2,}/).map(&:strip).reject(&:blank?) %>
+        <% intro = sections.shift %>
+
+        <% if intro.present? %>
+          <p class="briefing-body-intro"><%= intro %></p>
+        <% end %>
+
+        <div class="briefing-story-list">
+          <% sections.each do |section| %>
+            <% lines = section.split("\n").map(&:strip).reject(&:blank?) %>
+            <% next if lines.empty? %>
+            <% headline = lines[0].sub(/\A\d+\.\s*/, "") %>
+            <% summary_line = lines.find { |line| line.start_with?("Ozet:") } %>
+            <% link_line = lines.find { |line| line.start_with?("Kaynak baglantisi:") } %>
+            <% summary_text = summary_line.to_s.sub(/\AOzet:\s*/, "") %>
+            <% source_link = link_line.to_s.sub(/\AKaynak baglantisi:\s*/, "") %>
+
+            <article class="briefing-story-card">
+              <p class="briefing-story-card__eyebrow">Gundem Basligi</p>
+              <h3><%= headline %></h3>
+              <% if summary_text.present? %>
+                <p><%= summary_text %></p>
+              <% end %>
+              <%= link_to "Detayi ac", daily_briefing_path(@latest_briefing), class: "briefing-story-card__link" %>
+              <% if source_link.present? %>
+                <a href="<%= source_link %>" target="_blank" rel="noopener noreferrer" class="briefing-story-card__link">Kaynakta oku</a>
+              <% end %>
+            </article>
+          <% end %>
+        </div>
       </div>
     </article>
 
@@ -43,7 +76,7 @@
           <p class="eyebrow">Son Kayitlar</p>
           <% @recent_briefings.each do |briefing| %>
             <div class="briefing-archive-item">
-              <strong><%= briefing.title %></strong>
+              <strong><%= link_to briefing.title, daily_briefing_path(briefing), class: "briefing-archive-item__link" %></strong>
               <p><%= briefing.summary %></p>
               <span class="article-meta"><%= l(briefing.published_on, format: :long) %></span>
             </div>
